@@ -1,0 +1,14 @@
+node_modules/
+/.idea/
+git_log.txt
+.DS_STORE
+/coverage
+*.pem
+dev-datastore-credentials.json
+swagger/
+config/staging/.env
+config/dev/.env
+config/test/*.json
+config/staging/
+config/production/
+.vscode/
