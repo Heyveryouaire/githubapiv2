@@ -4,6 +4,7 @@
 const CONSTANTS = require("../constants")
 const Errors = require("../errors")
 const { mergeDeep } = require("../utils")
+const { convertOperator } = require("../../db-postgresql/utils")
 
 /**
  * Construct CRUD router for Model
@@ -50,49 +51,7 @@ const init = (context, router, Model, middelwares = {}) => {
         }
       }
 
-      // if (req.query.filters) {
-      // const paths = Model.rawAttributes
-      // try {
-      //   req.query.filters = JSON.parse(req.query.filters)
-      //     .map(filter => {
-      //       let property = filter[0]
-      //       if (paths[property]) {
-      //         console.log('In schema', property, 'type:', paths[property].type, '(', typeof paths[property].type, ')')
-      //       }
-      //       else {
-      //         console.log('Schema doesn\'t have a', property, 'property')
-      //       }
-      //       // Handle cases where we want to filter on a reference to an other
-      //       // entity (e.g.: all rides associated with driver wit id "349039820111")
-      //       // if (paths[property] && paths[property].type == 'entityKey') {
-      //       //   const modelName = paths[property].ref
-      //       //   const refModel = Models[modelName]
-      //       //   filter[1] = refModel.key(filter[1])
-      //       // }
-      //       // Casts values according to model spec, if it provides a cating function
-      //       // e.g: Dates
-      //       // else if (paths[property] && typeof paths[property].type == 'function' && paths[property].type.name != "Boolean" && paths[property].type.name != "String" && paths[property].type.name != "Number") {
-      //       //   const lastIndex = filter.length - 1
-      //       //   let lastValue = filter[lastIndex]
-      //       //   // Handle nested path, eg ["params", {pmr: true}]
-      //       //   if(typeof lastValue == 'object'){
-      //       //     const propKey = Object.keys(lastValue)[0]
-      //       //     property = `${property}.${propKey}`
-      //       //     lastValue = lastValue[propKey]
-      //       //     filter[0] = property
-      //       //     filter[lastIndex] = lastValue
-      //       //   }else{
-      //       //     filter[lastIndex] = new paths[property].type(lastValue)
-      //       //   }
-      //       // }
-      //       return filter
-      //     })
-      // } catch (err) {
-      //   console.error(err)
-      // }
-      // }
-
-      let filters = {}
+      let filters = []
 
       if (req.query.filters) {
         try {
@@ -103,8 +62,19 @@ const init = (context, router, Model, middelwares = {}) => {
         }
       }
 
+      const formattedFilters = filters.reduce((formattedFilters, filter) => {
+        if (filter.length === 2) {
+          formattedFilters[filter[0]] = filter[1]
+        } else {
+          const operator = convertOperator(filter[1])
+          formattedFilters[filter[0]] = { [operator]: filter[2] }
+        }
+
+        return formattedFilters
+      }, {})
+
       const results = await Model.findAndCountAll({
-        where: filters,
+        where: formattedFilters,
         ...req.query,
         raw: true
       })
@@ -175,9 +145,21 @@ const init = (context, router, Model, middelwares = {}) => {
 
       // let paramstest = mergeDeep(params, req.body)
 
-      const elementUpdated = await Model.update(req.body, {
+      const [result] = await Model.update(req.body, {
         where: { id: req.params.id }
       })
+
+      if (!result) {
+        next(
+          new Error(
+            "Un erreur est survenue lors de la mise à jour de l'élément"
+          )
+        )
+        return
+      }
+
+      const elementUpdated = await Model.findByPk(req.params.id)
+
       console.log("TCL: init -> elementUpdated", elementUpdated)
       // const elementUpdated = await Model.update(req.params.id, paramstest)
       res.status(202).send(elementUpdated.toJSON())
@@ -192,8 +174,19 @@ const init = (context, router, Model, middelwares = {}) => {
    */
   router.delete("/:id", middelwares.delete, async (req, res, next) => {
     try {
-      const result = await Model.delete(req.params.id)
-      res.status(204).send(result)
+      const result = await Model.destroy({
+        where: {
+          id: req.params.id
+        }
+      })
+
+      if (!result) {
+        next(new Error("Une erreur est survenue"))
+        return
+      }
+
+      console.log("TCL: init -> result", result)
+      res.sendStatus(204)
     } catch (err) {
       err.statusCode = err.statusCode || 500
       next(err)

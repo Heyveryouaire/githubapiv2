@@ -454,7 +454,8 @@ module.exports = (context, middlewares) => {
     // You can add checking writes middlewares.
     list: [],
     get: [],
-    update: []
+    update: [],
+    delete: [],
 
     // You can use them as a trigger (executed before the crud router),
     // to validate some fields, ...

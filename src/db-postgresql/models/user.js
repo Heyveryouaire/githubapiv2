@@ -22,7 +22,14 @@ module.exports = (sequelize, defaultFields = {}) => {
         },
         allowNull: false
       },
-      password: { type: Sequelize.STRING, read: false, allowNull: false },
+      password: {
+        type: Sequelize.STRING,
+        read: false,
+        allowNull: false,
+        get() {
+          return undefined
+        }
+      },
       phone: { type: Sequelize.STRING, optional: true },
       token: { type: Sequelize.STRING, optional: true, read: false }
       // roles: { type: Array, default: [] },
