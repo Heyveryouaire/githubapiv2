@@ -16,25 +16,26 @@ const start = async () => {
     firstname: "John2",
     lastname: "Hancock",
     email: "ee@ee.ee",
-    password: "password"
+    password: "password",
+    roles: ["test", "tata"]
   })
 
-  const role = await Role.create({
-    name: "Admin"
-  })
+  // const role = await Role.create({
+  //   name: "Admin"
+  // })
 
-  await user.addRole(role)
+  // await user.addRole(role)
 
-  const users = await User.findAll({
-    include: [
-      {
-        model: Role,
-        where: { name: "Admin" }
-      }
-    ]
-  })
+  // const users = await User.findAll({
+  //   include: [
+  //     {
+  //       model: Role,
+  //       where: { name: "Admin" }
+  //     }
+  //   ]
+  // })
 
-  console.log(User.rawAttributes)
+  // console.log(User.rawAttributes)
   // console.log("TCL: start -> users", users)
 }
 

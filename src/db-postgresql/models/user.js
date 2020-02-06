@@ -31,8 +31,8 @@ module.exports = (sequelize, defaultFields = {}) => {
         }
       },
       phone: { type: Sequelize.STRING, optional: true },
-      token: { type: Sequelize.STRING, optional: true, read: false }
-      // roles: { type: Array, default: [] },
+      token: { type: Sequelize.STRING, optional: true, read: false },
+      roles: { type: Sequelize.ARRAY(Sequelize.TEXT) , default: [] },
       // params: { type: Object, default: {} }
     },
     {

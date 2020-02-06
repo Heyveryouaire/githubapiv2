@@ -3,8 +3,9 @@
 
 const CONSTANTS = require("../constants")
 const Errors = require("../errors")
-const { mergeDeep } = require("../utils")
-const { convertOperator } = require("../../db-postgresql/utils")
+// const { mergeDeep } = require("../utils")
+// const { convertOperator } = require("../../db-postgresql/utils")
+const { listEntities } = require('./utils')
 
 /**
  * Construct CRUD router for Model
@@ -42,49 +43,73 @@ const init = (context, router, Model, middelwares = {}) => {
    * - order: Array: Example: [{ "property": "created_at", "descending": true }]
    */
   router.get("/", middelwares.list, async (req, res, next) => {
+
+
+
     try {
-      if (req.query.order) {
-        try {
-          req.query.order = JSON.parse(req.query.order)
-        } catch (err) {
-          console.error(err)
-        }
-      }
-
-      let filters = []
-
-      if (req.query.filters) {
-        try {
-          filters = JSON.parse(req.query.filters)
-          console.log("TCL: filters", filters)
-        } catch (err) {
-          console.error(err)
-        }
-      }
-
-      const formattedFilters = filters.reduce((formattedFilters, filter) => {
-        if (filter.length === 2) {
-          formattedFilters[filter[0]] = filter[1]
-        } else {
-          const operator = convertOperator(filter[1])
-          formattedFilters[filter[0]] = { [operator]: filter[2] }
-        }
-
-        return formattedFilters
-      }, {})
-
-      const results = await Model.findAndCountAll({
-        where: formattedFilters,
-        ...req.query,
-        raw: true
+      const { entities, totalCount } = await listEntities({
+        req,
+        Model,
       })
 
-      res.set("X-Total-Count", results.count)
-      res.send(results.rows)
+      res.set('X-Total-Count', totalCount)
+
+      res.send(entities)
     } catch (err) {
       err.statusCode = err.statusCode || 500
       next(err)
     }
+
+
+
+    // try {
+    //   if (req.query.order) {
+    //     try {
+    //       req.query.order = JSON.parse(req.query.order)
+    //     } catch (err) {
+    //       console.error(err)
+    //     }
+    //   }
+
+    //   let filters = []
+
+    //   if (req.query.filters) {
+    //     try {
+    //       filters = JSON.parse(req.query.filters)
+    //     } catch (err) {
+    //       console.error(err)
+    //     }
+    //   }
+
+    //   const formattedFilters = filters.reduce((formattedFilters, filter) => {
+    //     if (filter.length === 2) {
+    //       formattedFilters[filter[0]] = filter[1]
+    //     } else {
+    //       const operator = convertOperator(filter[1])
+    //       formattedFilters[filter[0]] = { [operator]: filter[2] }
+    //     }
+
+    //     return formattedFilters
+    //   }, {})
+
+    //   // let populate = false
+
+    //   if (req.query.populate) {
+    //     req.query.include = Model.populate
+    //   }
+
+    //   const results = await Model.findAndCountAll({
+    //     where: formattedFilters,
+    //     ...req.query,
+    //     // raw: true
+    //   })
+
+    //   res.set("X-Total-Count", results.count)
+    //   res.send(results.rows.map(r => r.toJSON()))
+    // } catch (err) {
+    //   err.statusCode = err.statusCode || 500
+    //   next(err)
+    // }
   })
 
   /**
@@ -92,7 +117,14 @@ const init = (context, router, Model, middelwares = {}) => {
    */
   router.get("/:id", middelwares.get, async (req, res, next) => {
     try {
-      const element = await Model.findByPk(req.params.id)
+
+      const opts = {}
+
+      if (req.query.populate) {
+        opts.include = Model.populate
+      }
+
+      const element = await Model.findByPk(req.params.id, opts)
 
       if (!element) {
         throw new Errors.ErrorWithStatusCode(
@@ -145,9 +177,7 @@ const init = (context, router, Model, middelwares = {}) => {
 
       // let paramstest = mergeDeep(params, req.body)
 
-      const [result] = await Model.update(req.body, {
-        where: { id: req.params.id }
-      })
+      const result = await Model.update(req.params.id, req.body)
 
       if (!result) {
         next(
@@ -160,7 +190,6 @@ const init = (context, router, Model, middelwares = {}) => {
 
       const elementUpdated = await Model.findByPk(req.params.id)
 
-      console.log("TCL: init -> elementUpdated", elementUpdated)
       // const elementUpdated = await Model.update(req.params.id, paramstest)
       res.status(202).send(elementUpdated.toJSON())
     } catch (err) {
@@ -174,18 +203,18 @@ const init = (context, router, Model, middelwares = {}) => {
    */
   router.delete("/:id", middelwares.delete, async (req, res, next) => {
     try {
-      const result = await Model.destroy({
-        where: {
-          id: req.params.id
-        }
-      })
+      // console.log('YPUHPUHPOUHPUHPUHPUHPUHPUHOPUHPUHPUHPU')
+      // const result = await Model.destroy({
+      //   where: {
+      //     id: req.params.id
+      //   }
+      // })
 
-      if (!result) {
-        next(new Error("Une erreur est survenue"))
-        return
-      }
+      // if (!result) {
+      //   next(new Error("Une erreur est survenue"))
+      //   return
+      // }
 
-      console.log("TCL: init -> result", result)
       res.sendStatus(204)
     } catch (err) {
       err.statusCode = err.statusCode || 500
