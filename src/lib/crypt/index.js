@@ -15,14 +15,14 @@ const createKeyPair = () => {
   }
 }
 
-const writeKeyPair = (env, keypair) => {
+const writeKeyPair = (keypair) => {
   if (!keypair) {
     throw new Error("Missing pair key to write them")
   }
 
   const keypairPath = {
-    publicPath: path.join(__dirname, '../../../config', env, `public.pem`),
-    privatePath: path.join(__dirname, '../../../config', env, `private.pem`)
+    publicPath: path.join(__dirname, '../../../config/public.pem'),
+    privatePath: path.join(__dirname, '../../../config/private.pem')
   }
 
   fs.writeFileSync(keypairPath.publicPath, keypair.public)
@@ -31,20 +31,20 @@ const writeKeyPair = (env, keypair) => {
   return keypairPath
 }
 
-const createAndWriteKeyPair = (env) => {
+const createAndWriteKeyPair = () => {
   const keypair = createKeyPair()
-  const paths = writeKeyPair(env, keypair)
-  loadKeys(env)
+  const paths = writeKeyPair(keypair)
+  loadKeys()
   return paths
 }
 
-const loadKeys = (env) => {
-  if (!fs.existsSync(path.join(__dirname, '../../../config', env, `public.pem`)) || !fs.existsSync(path.join(__dirname, '../../../config', env, `private.pem`))) {
-    throw new Error(`${path.join(__dirname, '../../../config', env, `public.pem`)} or ${path.join(__dirname, '../../../config', env, `private.pem`)} not found`)
+const loadKeys = () => {
+  if (!fs.existsSync(path.join(__dirname, '../../../config', `public.pem`)) || !fs.existsSync(path.join(__dirname, '../../../config/private.pem'))) {
+    throw new Error(`${path.join(__dirname, '../../../config', `public.pem`)} or ${path.join(__dirname, '../../../config/private.pem')} not found`)
   }
 
-  const publicKeyString = fs.readFileSync(path.join(__dirname, '../../../config', env, `public.pem`))
-  const privateKeyString = fs.readFileSync(path.join(__dirname, '../../../config', env, `private.pem`))
+  const publicKeyString = fs.readFileSync(path.join(__dirname, '../../../config/public.pem'))
+  const privateKeyString = fs.readFileSync(path.join(__dirname, '../../../config/private.pem'))
 
   let key = new NodeRSA({ b: 512 })
   key.setOptions({ encryptionScheme: 'pkcs1' }) // important -> set the encypt scheme
@@ -55,35 +55,35 @@ const loadKeys = (env) => {
   return key
 }
 
-const encode = (env, key, data) => {
+const encode = (key, data) => {
   if (!key) {
-    key = loadKeys(env)
+    key = loadKeys()
     // throw new Error('Load keys before encode data')
   }
 
   return key.encrypt(data, 'base64', 'utf8')
 }
 
-const decode = (env, key, data) => {
+const decode = (key, data) => {
   if (!key) {
-    key = loadKeys(env)
+    key = loadKeys()
     // throw new Error('Load keys before decode data')
   }
 
   return key.decrypt(data, 'utf8')
 }
 
-module.exports = (env) => {
+module.exports = () => {
   let key;
 
   return {
     createKeyPair: () => createKeyPair(),
-    writeKeyPair: (keypair) => writeKeyPair(env, keypair),
-    createAndWriteKeyPair: () => createAndWriteKeyPair(env),
+    writeKeyPair: (keypair) => writeKeyPair(keypair),
+    createAndWriteKeyPair: () => createAndWriteKeyPair(),
     loadKeys: () => {
-      key = loadKeys(env)
+      key = loadKeys()
     },
-    encode: (data) => encode(env, key, data),
-    decode: (data) => decode(env, key, data)
+    encode: (data) => encode(key, data),
+    decode: (data) => decode(key, data)
   }
 }
