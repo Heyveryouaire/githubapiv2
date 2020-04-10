@@ -5,10 +5,6 @@ git_log.txt
 /coverage
 *.pem
 dev-datastore-credentials.json
-swagger/
-config/staging/.env
-config/dev/.env
+config/.env
 config/test/*.json
-config/staging/
-config/production/
 .vscode/

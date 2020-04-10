@@ -99,6 +99,7 @@ module.exports = ({
 
   DB = { Models, db: sequelize }
 
+  console.log("Models", Models)
   // Models.Ride.findAll({
   //   include: [{ model: Models.Order, as: 'order' }],
   //   where: { 'Order.number': '51V1901992' }
