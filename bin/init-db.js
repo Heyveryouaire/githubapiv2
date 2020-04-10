@@ -19,6 +19,8 @@ const start = async () => {
   await db.sync({ force: true })
   
   console.log("Done")
+
+  process.exit()
 }
 
 start()
