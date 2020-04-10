@@ -7,7 +7,7 @@ This project is a boilerplate to create an API with:
 - Cloud Task      : Task scheduler
 
 ## Create env file
-Copy paste config/dev/.env-example to config/dev/.env
+Copy paste config/.env-example to config/.env
 
 Change env values.
 
@@ -15,7 +15,6 @@ Change env values.
 Create a service account on Google Cloud with role:
 - Cloud Tasks Admin
 - Cloud Trace Agent
-- Cloud Datastore Owner
 - Errors Writer
 - Logging Admin
 
