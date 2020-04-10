@@ -1,20 +1,12 @@
 const Confirm = require('prompt-confirm');
 const fs = require('fs')
 
-const env = process.env.NODE_ENV || "test"
+const { createAndWriteKeyPair } = require('../src/lib/crypt')()
 
-if (!["test", "dev", "production", "staging"].includes(env)) {
-  console.error('Only supported environment: "test", "dev" or "production"')
-  // eslint-disable-next-line
-  process.exit(-1)
-}
-
-const { createAndWriteKeyPair } = require('../src/lib/crypt')(env)
-
-new Confirm(`Do you want to generate key pair for "${env}" environment?`)
+new Confirm(`Do you want to generate key pair environment?`)
   .ask(function (answerOne) {
     if (!answerOne) {
-      console.log('Environments choice: "test", "dev", "staging" or "production". Generate with: NODE_ENV=dev npm run generate-keypair')
+      console.log('Generate with: npm run generate-keypair')
     } else if (isKeyPair()) {
       new Confirm(`Key pair already exists. Do you want to override it?`)
         .ask(function (answerTwo) {
@@ -35,5 +27,5 @@ const createKeyPair = () => {
 }
 
 const isKeyPair = () => {
-  return fs.existsSync(`./config/${env}/public.pem`) && fs.existsSync(`./config/${env}/private.pem`)
+  return fs.existsSync(`./config/public.pem`) && fs.existsSync(`./config/private.pem`)
 }
