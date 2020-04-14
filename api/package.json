@@ -1,0 +1,85 @@
+{
+  "name": "@caralliance/safir-api",
+  "version": "0.3.21",
+  "description": "",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "test": "NODE_ENV=test && node node_modules/.bin/jest --silent --bail --runInBand --detectOpenHandles",
+    "test-debug": "NODE_ENV=test && node node_modules/.bin/jest --runInBand",
+    "start": "NODE_ENV=production node index.js",
+    "migrate": "GOOGLE_APPLICATION_CREDENTIALS=config/dev/dev-datastore-credentials.json node bin/migrate.js",
+    "create-drivers": "GOOGLE_APPLICATION_CREDENTIALS=config/dev/dev-datastore-credentials.json node bin/create-drivers.js",
+    "create-queue": "GOOGLE_APPLICATION_CREDENTIALS=config/dev/dev-datastore-credentials.json node bin/create-queue.js",
+    "dev": "NODE_ENV=dev PORT=3000 node --inspect=127.0.0.1:13000 index.js",
+    "start-emulate-datastore": "gcloud beta emulators datastore start --no-store-on-disk",
+    "generate-keypair": "node bin/generate-keypair.js",
+    "lint": "eslint --ignore-path .gitignore .",
+    "deploy": "now -f && now alias && now rm @caralliance/safir-api --safe --yes"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@google-cloud/debug-agent": "^3.1.0",
+    "@google-cloud/profiler": "^1.1.2",
+    "@google-cloud/tasks": "^0.4.0",
+    "@google-cloud/trace-agent": "^3.6.0",
+    "acorn": "^7.1.1",
+    "bcrypt": "^3.0.8",
+    "dotenv": "^6.2.0",
+    "express": "^4.16.4",
+    "express-bearer-token": "^2.2.0",
+    "express-validator": "^5.3.1",
+    "jsonwebtoken": "^8.4.0",
+    "mandrill-api": "^1.0.45",
+    "ngrok": "^3.1.1",
+    "nock": "^10.0.6",
+    "node-fetch": "^2.6.0",
+    "node-rsa": "^1.0.5",
+    "pg": "^7.15.1",
+    "pg-hstore": "^2.3.3",
+    "prompt": "^1.0.0",
+    "prompt-confirm": "^2.0.4",
+    "rand-token": "^0.4.0",
+    "randomstring": "^1.1.5",
+    "sequelize": "^5.21.3",
+    "swagger-jsdoc": "^3.2.9"
+  },
+  "devDependencies": {
+    "acorn-jsx": "^5.2.0",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.16.0",
+    "faker": "^4.1.0",
+    "jest": "^24.1.0",
+    "lerna": "^3.20.2",
+    "supertest": "^3.4.2"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "coverageReporters": [
+      "text",
+      "json",
+      "html"
+    ],
+    "globalSetup": "<rootDir>/config/test/setupTests.js",
+    "globalTeardown": "<rootDir>/config/test/teardownTests.js",
+    "setupFilesAfterEnv": [
+      "<rootDir>/config/test/setupTestFrameworkScriptFile.js"
+    ]
+  },
+  "now": {
+    "alias": "caralliance-safir-api",
+    "scale": {
+      "bru1": {
+        "min": 1,
+        "max": 5
+      }
+    },
+    "files": [
+      "config",
+      "src"
+    ]
+  }
+}

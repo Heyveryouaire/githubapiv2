@@ -10,7 +10,7 @@ module.exports = (context, _middlewares) => {
 
   router.get("/", (req, res) => {
     graph.queryRepoId({
-      login: "Heyveryouaire",
+      login: process.env.GITHUB_USERNAME,
       repositoryName: "GraphQL2"
     })
       .then(rep => {
@@ -20,7 +20,7 @@ module.exports = (context, _middlewares) => {
 
   router.get("/issueId", (req, res) => {
     graph.queryIssueId({
-      login: "Heyveryouaire",
+      login: process.env.GITHUB_USERNAME,
       repositoryName: "GraphQL2",
       issueNum: 10
     }).then(rep => {
@@ -33,7 +33,7 @@ module.exports = (context, _middlewares) => {
     graph.mutationCreateRepo({
       name: "test yollo",
       visibility: "PUBLIC",
-      login: "Heyveryouaire"
+      login: process.env.GITHUB_USERNAME
     }).then(rep => {
       res.send(rep)
     })
@@ -43,7 +43,7 @@ module.exports = (context, _middlewares) => {
     graph.mutationCreateIssue({
       title: "Title",
       body: "niiiice",
-      login: "heyveryouaire",
+      login: process.env.GITHUB_USERNAME,
       repositoryName: "exo"
     }).then(rep => {
       res.send(rep)
