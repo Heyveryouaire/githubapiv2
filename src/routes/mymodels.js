@@ -6,7 +6,7 @@ const router = require('express').Router()
 module.exports = (context, _middlewares) => {
   // const { MyModel } = require('../db')(context.env.GCLOUD_PROJECT, process.env.GCLOUD_DATASTORE_NAMESPACE)
 
-  // Need to be declared after router routes declaration to not override them.
+  // // Need to be declared after router routes declaration to not override them.
   // const crudRouter = require('../lib/router/crud')(context, router, MyModel, {
 
   //   // You can add checking writes middlewares.

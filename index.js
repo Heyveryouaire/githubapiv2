@@ -16,13 +16,13 @@ process.env.PORT = listenPort
 const path = require('path')
 
 require('dotenv').config({
-  path: path.join(__dirname, `/config/${process.env.NODE_ENV}/.env`)
+  path: path.join(__dirname, `/config/.env`)
 })
 
 process.env.TZ = "Europe/Paris"
 
 if (process.env.NODE_ENV != "production") {
-  process.env.GOOGLE_APPLICATION_CREDENTIALS = path.join(__dirname, process.env.GOOGLE_APPLICATION_CREDENTIALS_FILE)
+  // process.env.GOOGLE_APPLICATION_CREDENTIALS = path.join(__dirname, process.env.GOOGLE_APPLICATION_CREDENTIALS_FILE)
 }
 
 if (process.env.NODE_ENV == "production") {

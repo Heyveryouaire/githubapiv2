@@ -7,6 +7,9 @@ const bodyParser = require('body-parser')
 const domain = require('domain')
 const bearerToken = require('express-bearer-token')
 
+console.log(bearerToken);
+
+
 app.use(bodyParser.raw());
 app.use(bodyParser.json());
 app.use(bodyParser.text());
@@ -56,23 +59,24 @@ app.use((err, _req, res, _next) => {
 
 (
   async () => {
-    if (process.env.NODE_ENV == "dev") {
-      const ngrok = require('ngrok');
+  //   if (process.env.NODE_ENV == "dev") {
+      // const ngrok = require('ngrok');
 
-      // Kill old process ngrok.
-      // With hot code reloading, ngrok process isn't killed.
-      try {
-        require('child_process').execSync('pkill ngrok');
-      } catch (_err) {
-        //
-      }
+  //     // Kill old process ngrok.
+  //     // With hot code reloading, ngrok process isn't killed.
+  //     try {
+  //       require('child_process').execSync('pkill ngrok');
+  //     } catch (_err) {
+  //       //
+  //     }
 
-      process.env.NGROK_URL = await ngrok.connect(process.env.PORT)
-    }
+  //     process.env.NGROK_URL = await ngrok.connect(process.env.PORT)
+  //   }
 
     require('./services')(context)
   }
-)();
+)
+();
 
 // Init all context with listeners
 

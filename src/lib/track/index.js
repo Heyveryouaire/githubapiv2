@@ -2,12 +2,12 @@
 'use strict'
 
 const _track = (Event, User, user, name, payload) => {
-  const event = new Event({
-    name,
-    payload,
-    user: user ? User.key(user) : null
-  })
-  return event.save()
+  // const event = new Event({
+  //   name,
+  //   payload,
+  //   user: user ? User.key(user) : null
+  // })
+  // return event.save()
 }
 
 const init = (GCLOUD_PROJECT, GCLOUD_DATASTORE_NAMESPACE) => {

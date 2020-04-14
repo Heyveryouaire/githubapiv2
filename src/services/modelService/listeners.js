@@ -15,7 +15,7 @@ module.exports = (_context) => {
   })
 
   // Execute task with Cloud Task
-  emitAsync(null, "test-event", { tata: "tata", "tutu": "tututu" })
+  // emitAsync(null, "test-event", { tata: "tata", "tutu": "tututu" })
 
   // Execute task with Promise.
   // emit(null, "test-event", { tata: "tata", "tutu": "tututu" })

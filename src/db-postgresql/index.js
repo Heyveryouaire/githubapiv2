@@ -15,6 +15,8 @@ module.exports = ({
   POSTGRESQL_PASSWORD,
   POSTGRESQL_PORT
 }) => {
+  console.log(POSTGRESQL_PASSWORD, POSTGRESQL_USERNAME, POSTGRESQL_HOST, POSTGRESQL_DB, POSTGRESQL_PORT);
+  
   if (DB) return DB
 
   // Create sequelize model for PostgreSQL.
@@ -26,7 +28,7 @@ module.exports = ({
       host: POSTGRESQL_HOST,
       port: POSTGRESQL_PORT,
       dialect: "postgres",
-      logging: false
+      // logging: false
     }
   )
 
