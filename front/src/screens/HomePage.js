@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import { classes as cls, getColor, View, ScrollView } from "tw";
-import { useUser } from "src/stores/user";
+import { useUserStore } from "src/stores/user";
 
 import { Title, Subtitle, Text } from "components/typography";
 import Card from "components/Card";
@@ -17,7 +17,7 @@ import Avatar from "components/Avatar";
 import Snackbar from "components/Snackbar";
 
 export default function HomePage() {
-  const token = useUser(({ token }) => token);
+  const token = useUserStore(({ token }) => token);
 
   const [radio, setRadio] = useState("first");
 

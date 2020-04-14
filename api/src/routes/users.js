@@ -64,12 +64,9 @@ module.exports = (context, middlewares) => {
    *          description: Email already exists
    */
   router.post('/', [
-    body('email').not().isEmpty(),
+    body('username').not().isEmpty(),
     body('password').not().isEmpty(),
     body('password').isLength({ min: 6 }),
-    body('phone').not().isEmpty(),
-    body('lastname').not().isEmpty(),
-    body('firstname').not().isEmpty(),
     middlewares.checkParametersErrors
   ], async (req, res, next) => {
     try {
@@ -117,7 +114,7 @@ module.exports = (context, middlewares) => {
    *         description: Return token and refresh token
    */
   router.post('/login', [
-    body('email').not().isEmpty(),
+    body('username').not().isEmpty(),
     body('password').not().isEmpty(),
     body('password').isLength({ min: 6 }),
     middlewares.checkParametersErrors
@@ -126,9 +123,9 @@ module.exports = (context, middlewares) => {
       const user = await UserService.checkLogin(req.body)
 
       if (user && (user.roles.includes(CONSTANTS.ROLES.USER) || user.roles.includes(CONSTANTS.ROLES.ADMIN))) {
-        const tokens = UserService.generateJWTTokens(user.entityKey.id)
+        const tokens = UserService.generateJWTTokens(user.id)
 
-        let userJSON = user.plain()
+        let userJSON = user
         userJSON.tokens = tokens
 
         res.status(200).json(userJSON)

@@ -44,6 +44,8 @@ export function SignUpBase({
 
   const onPasswordSubmit = useCallback(
     data => {
+      console.log("onPasswordSublut " + data);
+      
       onSubmit(data);
     },
     [handleSubmit]

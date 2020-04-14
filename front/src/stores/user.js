@@ -24,5 +24,5 @@ const userStore = create(
   )
 );
 
-export const useUser = userStore[0];
+export const useUserStore = userStore[0];
 export const userApi = userStore[1];

@@ -33,23 +33,30 @@ const init = (context, _start_listeners = true) => {
    * @param {*} params
    */
   async function createUserInDb(params) {
-    let user = await User.findOne({ where: { email: params.email } })
+    // let user = await User.findOne({ where: { email: params.email } })
 
-    if (user) {
+    // if (user) {
+    //   throw new Errors.ErrorWithStatusCode(
+    //     `Email ${params.email} déjà pris.`,
+    //     409
+    //   )
+    // }
+
+    // user = await User.findOne({ where: { phone: params.phone } })
+
+    // // Regular users are subject to phone number unicity constraint.
+    // // Drivers should be updated if one is found with the same phone number.
+    // if (user) {
+    //   throw new Errors.ErrorWithStatusCode(
+    //     `Numéro de téléphone "${params.phone}" déjà pris.`,
+    //     409
+    //   )
+    // }
+    let user = await User.findOne({ where : { username : params.username } })
+
+    if(user){
       throw new Errors.ErrorWithStatusCode(
-        `Email ${params.email} déjà pris.`,
-        409
-      )
-    }
-
-    user = await User.findOne({ where: { phone: params.phone } })
-
-    // Regular users are subject to phone number unicity constraint.
-    // Drivers should be updated if one is found with the same phone number.
-    if (user) {
-      throw new Errors.ErrorWithStatusCode(
-        `Numéro de téléphone "${params.phone}" déjà pris.`,
-        409
+        `Impossible, nom déjà pris !`, 409
       )
     }
 
@@ -129,13 +136,13 @@ const init = (context, _start_listeners = true) => {
    * Authenticate a user by email and password.
    * @param {*} param
    */
-  const authenticate = async ({ email = "", password = "" } = {}) => {
-    if (!email || !password) {
+  const authenticate = async ({ username = "", password = "" } = {}) => {
+    if (!username || !password) {
       throw new Error("Email ou mot de passe manquant.")
     }
 
     // Check email / password.
-    const user = await checkLogin({ email, password })
+    const user = await checkLogin({ username, password })
 
     // If user found, generate JWT tokens
     if (user && jwt.validatePassword(password || "", user.password)) {
@@ -158,12 +165,18 @@ const init = (context, _start_listeners = true) => {
    * Check login by email and password.
    * @param {*} param0
    */
-  const checkLogin = async ({ email, password }) => {
+  const checkLogin = async ({ username, password }) => {
+    console.log("username ", username);
+    
     let user = await User.findBy(
-      { email },
+      
+      { username },
       { readAll: true, select: ["password", "isemailvalid"] }
     )
-
+    if(user) {
+      user = user.dataValues
+    }
+    console.log("user", user);
     // Check if password is ok.
     if (user && !jwt.validatePassword(password || "", user.password)) {
       user = null

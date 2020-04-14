@@ -11,7 +11,7 @@
     "migrate": "GOOGLE_APPLICATION_CREDENTIALS=config/dev/dev-datastore-credentials.json node bin/migrate.js",
     "create-drivers": "GOOGLE_APPLICATION_CREDENTIALS=config/dev/dev-datastore-credentials.json node bin/create-drivers.js",
     "create-queue": "GOOGLE_APPLICATION_CREDENTIALS=config/dev/dev-datastore-credentials.json node bin/create-queue.js",
-    "dev": "NODE_ENV=dev PORT=3000 node --inspect=127.0.0.1:13000 index.js",
+    "dev": "NODE_ENV=dev PORT=3000 nodemon --inspect=127.0.0.1:13000 index.js",
     "start-emulate-datastore": "gcloud beta emulators datastore start --no-store-on-disk",
     "generate-keypair": "node bin/generate-keypair.js",
     "lint": "eslint --ignore-path .gitignore .",

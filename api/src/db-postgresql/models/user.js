@@ -8,11 +8,11 @@ module.exports = (sequelize, defaultFields = {}) => {
       // attributes
       firstname: {
         type: Sequelize.STRING,
-        allowNull: false
+        
       },
       lastname: {
         type: Sequelize.STRING,
-        allowNull: false
+       
         // allowNull defaults to true
       },
       email: {
@@ -20,15 +20,19 @@ module.exports = (sequelize, defaultFields = {}) => {
         validate: {
           isEmail: true
         },
-        allowNull: false
+       
       },
       password: {
         type: Sequelize.STRING,
         read: false,
-        allowNull: false,
+        
         get() {
           return undefined
         }
+      },
+      username: {
+        type: Sequelize.STRING,
+
       },
       phone: { type: Sequelize.STRING, optional: true },
       token: { type: Sequelize.STRING, optional: true, read: false },

@@ -5,7 +5,7 @@ import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 
 import { initialize, useAppLoadingState } from "state";
 import UserManagementNavigator from "src/navigators/user";
-import { useUser } from "src/stores/user";
+import { useUserStore } from "src/stores/user";
 
 import MainNavigator from "src/navigators/main";
 
@@ -16,6 +16,7 @@ import LoginPage from "src/screens/LoginPage";
 import SignupPage from "src/screens/SignupPage";
 import PasswordForgotPage from "src/screens/PasswordForgotPage";
 
+import { UserProvider } from "src/hooks/user"
 const Theme = {
   ...DefaultTheme,
   colors: {
@@ -40,29 +41,33 @@ export default function App() {
     initialize();
   }, []);
 
-  const token = useUser(({ token }) => token);
-
+  const token = useUserStore(({ token }) => token);
+  console.log("token", token);
+  
   if (!appState.loaded) return <SplashLoader />;
 
   return (
-    <Portal.Host>
-      <SafeAreaView
-        style={{ width: "100%", height: "100%", backgroundColor: "white" }}
-      >
-        <NavigationContainer theme={Theme}>
-          {token == null ? (
-            <UserManagementNavigator
-              signin={LoginPage}
-              signup={SignupPage}
-              passwordRenewal={PasswordForgotPage}
-            />
-          ) : (
-            // That's the main Application navigation
-            // after the user logged in
-            <MainNavigator />
-          )}
-        </NavigationContainer>
-      </SafeAreaView>
-    </Portal.Host>
+    <UserProvider>
+
+      <Portal.Host>
+        <SafeAreaView
+          style={{ width: "100%", height: "100%", backgroundColor: "white" }}
+          >
+          <NavigationContainer theme={Theme}>
+            {token == null ? (
+              <UserManagementNavigator
+                signin={LoginPage}
+                signup={SignupPage}
+                passwordRenewal={PasswordForgotPage}
+              />
+              ) : (
+              // That's the main Application navigation
+              // after the user logged in
+              <MainNavigator />
+              )}
+          </NavigationContainer>
+        </SafeAreaView>
+      </Portal.Host>
+    </UserProvider>
   );
 }

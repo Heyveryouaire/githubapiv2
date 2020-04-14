@@ -1,6 +1,6 @@
 import React from "react";
 
-import { useUser } from "src/stores/user";
+import { useUserStore } from "src/stores/user";
 
 import Button from "components/form/Button";
 
@@ -10,7 +10,7 @@ LogoutButton.defaultProps = {
 };
 
 export default function LogoutButton({ outlined, color }) {
-  const resetApp = useUser(({ resetApp }) => resetApp);
+  const resetApp = useUserStore(({ resetApp }) => resetApp);
 
   return (
     <Button outlined={outlined} color={color} onPress={() => resetApp()}>
