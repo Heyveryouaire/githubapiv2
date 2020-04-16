@@ -15,8 +15,9 @@ import IconButton from "components/form/IconButton";
 import Avatar from "components/Avatar";
 
 import Snackbar from "components/Snackbar";
+import Navbar from "./parts/Nav";
 
-export default function HomePage() {
+export default function HomePage({ navigation }) {
   const token = useUserStore(({ token }) => token);
 
   const [radio, setRadio] = useState("first");
@@ -29,7 +30,10 @@ export default function HomePage() {
       style={cls`flex-1 w-full h-full`}
       contentContainerStyle={cls`m4 items-start justify-start`}
     >
-      <Title>Compte</Title>
+      <Title>Bienvenue User</Title>
+
+      <Navbar navigation={navigation}></Navbar>
+
       <Subtitle>Paramétrage du compte</Subtitle>
       <Text>{token}</Text>
       <LogoutButton />

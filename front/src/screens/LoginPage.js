@@ -23,9 +23,7 @@ export default function LoginPage() {
 
       setLoading(true);
       try {
-        await logIn(credentials);
-        console.log("getusertoken", getUserToken());
-        
+        await logIn(credentials);        
         setToken(getUserToken());
       } catch (err) {
         setError(err);

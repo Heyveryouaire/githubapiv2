@@ -147,9 +147,15 @@ class Graphql extends AbstractGraphql{
         return new Promise((resolve, reject) => {
             this.queryRepoId({ login : data.login , repositoryName : data.repositoryName})
             .then(rep => {
+                if(rep.data.user.repository == null){
+                    reject("Cannot find the repository for this account")
+                }
                 resolve(rep)
+                console.log(rep);
+                
+            }).catch((err) => {
+                console.log(err);
             })
-
         }).then((id) => {
                 data.repositoryId = id.data.user.repository.id
                 this.query = `
@@ -166,6 +172,8 @@ class Graphql extends AbstractGraphql{
             this.setVariables(data)
         })
         .then(() => {
+            console.log("Query looks like to works fine !");
+            
             return this.sendRequest()
         })
 

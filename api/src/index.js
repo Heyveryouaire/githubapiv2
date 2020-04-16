@@ -7,9 +7,11 @@ const bodyParser = require('body-parser')
 const domain = require('domain')
 const bearerToken = require('express-bearer-token')
 
+const cors = require("cors")
+
 console.log(bearerToken);
 
-
+app.use(cors())
 app.use(bodyParser.raw());
 app.use(bodyParser.json());
 app.use(bodyParser.text());

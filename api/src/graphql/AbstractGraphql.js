@@ -46,6 +46,8 @@ class AbstractGraphql {
             repositoryName: data.repositoryName,
             issueNum: data.issueNum
         }
+        console.log(this.variables);
+        
     }
 
 }

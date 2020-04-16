@@ -3,7 +3,8 @@ import { API_URL } from "./constants";
 /* eslint-disable class-methods-use-this */
 const ROUTES = {
   USERS: `${API_URL}/users`,
-  STEPS: `${API_URL}/steps`
+  STEPS: `${API_URL}/steps`,
+  CREATEISSUE : `${API_URL}/githubapi`
 };
 const DEFAULT_HEADERS = {
   "Content-Type": "application/json"
@@ -38,7 +39,7 @@ function request(method, url, { token, body, query, fileName } = {}) {
       // })
       reject(error);
     }, 30000);
-    url += queryParams(query);
+    url += queryParams(query);    
     fetch(url, options)
       .then(async response => {
         clearTimeout(timeout);
@@ -158,5 +159,9 @@ export default {
     return get(`${ROUTES.STEPS}/nlp-model`, {
       token: params.token
     });
+  },
+  createIssue: params => {
+     
+    return post(`${ROUTES.CREATEISSUE}/createIssue`, { body: params})
   }
 };

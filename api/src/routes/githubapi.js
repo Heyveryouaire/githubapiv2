@@ -2,6 +2,9 @@
 'use strict'
 
 const router = require('express').Router()
+const cors = require("cors")
+
+router.use(cors())
 
 const Graphql = require("../graphql/Graphql")
 let graph = new Graphql()
@@ -30,7 +33,7 @@ module.exports = (context, _middlewares) => {
 
 
   router.get("/createRepo", (req, res) => {
-    graph.mutationCreateRepo({
+      graph.mutationCreateRepo({
       name: "test yollo",
       visibility: "PUBLIC",
       login: process.env.GITHUB_USERNAME
@@ -39,14 +42,17 @@ module.exports = (context, _middlewares) => {
     })
   })
 
-  router.get("/createIssue", (req, res) => {
+  router.post("/createIssue", (req, res) => {    
+    console.log(req.body);
     graph.mutationCreateIssue({
-      title: "Title",
-      body: "niiiice",
+      title: req.body.title,
+      body: req.body.body,
       login: process.env.GITHUB_USERNAME,
-      repositoryName: "exo"
-    }).then(rep => {
-      res.send(rep)
+      repositoryName: req.body.repositoryName
+    }).then(rep => {      
+      console.log(JSON.stringify(rep));
+      
+      res.status(200).json(rep)
     })
   })
 

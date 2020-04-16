@@ -6,8 +6,7 @@ const storedUser = userApi.getState();
 const userActions = setUser => ({
   async login({ username, password }) {
     const { results } = await Api.signin({ username, password });
-    console.log("result", results);
-    
+   
     if (results && results.tokens) {
       userApi.setState(results);
       setUser(results);
@@ -25,6 +24,31 @@ const userActions = setUser => ({
       setUser(results);
     } else {
       throw new Error("bad credentials");
+    }
+  },
+  // really for testing 
+  async createIssue({ label, date, project, body}) {
+
+    console.log(label, date, project, body);
+   
+    const { results }  = await Api.createIssue({
+      // login is add manually for now
+      login : "",
+      title : `${label} - ${date}`,
+      body : body,
+      repositoryName : project,
+      // token is add manually for now
+      token : ""
+    })
+    // if(results && results.token){
+    // Je ne retourne pas de token ....
+    // ca doit etre ici que l'erreur sur ticketpage se genere 
+    if(results){      
+      console.log("ICI CA PASSE FAUT PAS DEC !!")
+      userApi.setState(results)
+      setUser(results)
+    } else {
+      throw new Error("bad bad bad ")
     }
   },
   logout() {
@@ -62,13 +86,23 @@ export function useUser() {
       password
     });
   };
+
+  const createIssue = async ({ label, date, project, body}) => {
+    setLoading(true)
+    setError(null)
+    await userContext.actions.createIssue({
+      label,
+      date,
+      project,
+      body
+    })
+  }
+
   const logOut = () => {
     userContext.actions.logout();
   };
   const getUserToken = () => {
-    try {
-      console.log("usercontext", userContext);
-      
+    try {      
       return userContext.user.tokens.token;
     } catch (err) {
       return null;
@@ -82,6 +116,7 @@ export function useUser() {
     logIn,
     signUp,
     logOut,
-    getUserToken
+    getUserToken,
+    createIssue
   };
 }

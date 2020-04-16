@@ -42,7 +42,6 @@ export default function App() {
   }, []);
 
   const token = useUserStore(({ token }) => token);
-  console.log("token", token);
   
   if (!appState.loaded) return <SplashLoader />;
 

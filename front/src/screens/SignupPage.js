@@ -17,7 +17,7 @@ export default function SignupPage() {
 
 
   const fakeSubmit = async params => {
-      console.log("SIGNUPAGE"  + params);
+      console.log("SIGNUPAGE", params);
       
     setLoading(true);
       try {
