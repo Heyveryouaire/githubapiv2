@@ -25,7 +25,6 @@ const init = (context) => {
 
   const _parseUser = async (req, _res, next) => {
     const token = req.token
-
     try {
       if (token) {
         const decoded = jwt.verify(token, JWT_SECRET)

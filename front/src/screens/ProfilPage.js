@@ -1,24 +1,42 @@
-import React, { useState } from "react";
-
-import { classes as cls, getColor, View, ScrollView } from "tw";
+import React, { useState, useCallback } from "react";
+import { classes as cls, color, View, ScrollView } from "tw";
 import { useUserStore } from "src/stores/user";
+import { Title} from "components/typography";
 
-import { Title, Subtitle, Text } from "components/typography";
-
-import LogoutButton from "components/LogoutButton";
 import Stack from "components/layout/Stack";
-import Avatar from "components/Avatar";
 import Navbar from "./parts/Nav";
-
-import Input from "components/form/Input"
-import Button from "components/form/Button"
+import { ProfilBase } from "../components/Profil";
+import { useUser } from "src/hooks/user"
 
 export default function ProfilPage({ navigation }) {
-  const token = useUserStore(({ token }) => token);
+  // const token = useUser(({ token }) => token);
+  const setToken = useUserStore(({ token }) => token)
+  const [ error, setError ] = useState(null)
+  const [ loading, setLoading ] = useState(false)
+  const { updateProfil , getUserToken } = useUser()
 
-  const [showSnack, setShowSnack] = useState(false);
-  console.log("HomePage -> showSnack", showSnack);
 
+  const [showSnack, setShowSnack] = useState(false);useUserStore
+
+  const fakeSubmit = async params => {
+    console.log("PROFILPAGE ", params);
+    
+  setLoading(true);
+    try {
+      await updateProfil(params, setToken);
+      token(getUserToken());
+    } catch (err) {      
+      setError(err);
+      setLoading(false);
+    }
+    setLoading(false);
+  }
+
+  const clearError = useCallback(() => {
+    setError(null);
+  }, [setError]);
+
+  
   return (
     <ScrollView
       style={cls`flex-1 w-full h-full`}
@@ -30,26 +48,16 @@ export default function ProfilPage({ navigation }) {
 
       <View style={cls`w-1/2 bg-white`}>
         <Stack vertical style={cls`w-full`}>
-          
-          <Title>Nom</Title>
-          <Input placeholder="Votre nom"></Input>
+        
+          <ProfilBase
+            color={color.blue600}
+            errorColor={color.red500}
+            onSubmit={fakeSubmit}
+            submissionError={error}
+            clearSubmissionError={clearError}
+            submissionLoading={loading}>
+          </ProfilBase>
 
-          <Title>Prénom</Title>
-          <Input placeholder="Votre prénom"></Input>
-
-          <Title>Société</Title>
-          <Input placeholder="Votre société"></Input>
-
-          <Title>Adresse e-mail</Title>
-          <Input placeholder="Votre e-mail"></Input>
-
-          <Title>Photo de profil</Title>
-          <Input placeholder="Ajouter une photo de profil"></Input>
-
-          <Stack horizontal style={cls`w-auto flex-1 items-center justify-around`}>
-            <Button>Annuler</Button>
-            <Button>Valider</Button>
-          </Stack>        
         </Stack>
       </View>
     </ScrollView>

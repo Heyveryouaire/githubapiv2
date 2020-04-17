@@ -1,14 +1,9 @@
 import React, { useState, useCallback } from "react";
-
 import { classes as cls, View, color } from "tw";
 
 import { Title } from "components/typography";
 import { SignUpBase } from "components/Signup";
-
-import { useUserStore } from "src/stores/user"
-
 import { useUser } from "src/hooks/user"
-
 
 export default function SignupPage() {
   const [error, setError] = useState(null);

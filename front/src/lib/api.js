@@ -29,6 +29,8 @@ function request(method, url, { token, body, query, fileName } = {}) {
       : DEFAULT_HEADERS,
     body: body ? JSON.stringify(body) : undefined
   };
+  console.log(options);
+  
   // Object.entries(options.headers).forEach(([key, value]) => console.log(key, ':', value))
   return new Promise((resolve, reject) => {
     const timeout = setTimeout(() => {
@@ -115,7 +117,7 @@ function post(url, params) {
 function put(url, params) {
   return request("put", url, params);
 }
-function patch(url, params) {
+function patch(url, params) {  
   return request("patch", url, params);
 }
 function get(url, params) {
@@ -161,7 +163,12 @@ export default {
     });
   },
   createIssue: params => {
-     
     return post(`${ROUTES.CREATEISSUE}/createIssue`, { body: params})
+  },
+  updateProfil: (params, token) => {
+    return patch(`${ROUTES.USERS}`, { 
+      body: params, 
+      token
+    })
   }
 };

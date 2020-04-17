@@ -3,6 +3,8 @@ import Api from "../lib/api";
 import { userApi, useUserStore } from "../stores/user";
 
 const storedUser = userApi.getState();
+
+
 const userActions = setUser => ({
   async login({ username, password }) {
     const { results } = await Api.signin({ username, password });
@@ -26,11 +28,28 @@ const userActions = setUser => ({
       throw new Error("bad credentials");
     }
   },
-  // really for testing 
-  async createIssue({ label, date, project, body}) {
+  async updateProfil({ nom, prenom, company, email, phone}, token) { 
+    console.log("test storedUser ", storedUser);  
+    const { results }  = await Api.updateProfil({
+      lastname : nom,
+      firstname : prenom,
+      company: company,
+      email: email,
+      phone: phone
+    }, token)// Si j'ajoutais le token ici ? y'a moyen
 
-    console.log(label, date, project, body);
-   
+    if(results && results.tokens){    
+      console.log("hi there");
+        
+      userApi.setState(results)
+      setUser(results)
+    } else {
+      throw new Error("bad bad bad ")
+    }
+  },
+  
+
+  async createIssue({ label, date, project, body}) {   
     const { results }  = await Api.createIssue({
       // login is add manually for now
       login : "",
@@ -51,12 +70,14 @@ const userActions = setUser => ({
       throw new Error("bad bad bad ")
     }
   },
+
   logout() {
     const resetApp = useUserStore(({ resetApp }) => resetApp);
     resetApp();
     setUser(null);
   }
 });
+
 const UserContext = React.createContext();
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(storedUser);
@@ -98,6 +119,18 @@ export function useUser() {
     })
   }
 
+  const updateProfil = async ({ nom, prenom, company, email, phone }, token) => {
+    setLoading(true)
+    setError(null)
+    await userContext.actions.updateProfil({
+      nom,
+      prenom,
+      company,
+      email,
+      phone
+    }, token)
+  }
+
   const logOut = () => {
     userContext.actions.logout();
   };
@@ -117,6 +150,7 @@ export function useUser() {
     signUp,
     logOut,
     getUserToken,
-    createIssue
+    createIssue,
+    updateProfil
   };
 }

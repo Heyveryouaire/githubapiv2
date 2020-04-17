@@ -377,7 +377,8 @@ module.exports = (context, middlewares) => {
    */
   router.patch('/', [middlewares.isAuthenticated], async (req, res, next) => {
     // Keep only authorized properties to update
-    const availableProperties = ["firstname", "lastname", "email", "phone", "organisation", "push_notifications", "sms_notifications"]
+    const availableProperties = ["firstname", "lastname", "email", "phone", "organisation", "push_notifications", "sms_notifications", "company"]
+    // const availableProperties = ["firstname", "lastname", "email", "phone", "company"]
     const requestedFields = Object.keys(req.body)
 
     let properties = {}
@@ -389,8 +390,14 @@ module.exports = (context, middlewares) => {
     })
 
     try {
-      const user = await UserService.User.update(req.user.entityKey.id, properties)
-      emit(req.user.entityKey.id, EVENTS.USER_UPDATED, { user: user.plain(), properties })
+
+      console.log(req.user.id);
+      
+      // La modification se fait, meme si ca me jete 
+      // voir avec google ? 
+      // req.user.id works, mais pas req.user.entityKey.id
+      const user = await UserService.User.update(req.user.id, properties)
+      emit(req.user.id, EVENTS.USER_UPDATED, { user: user.plain(), properties })
       res.status(202).send(cleanPrivateInfos(user.plain()))
     } catch (err) {
       err.statusCode = err.statusCode || 400

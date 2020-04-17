@@ -1,18 +1,12 @@
 import React, { useState } from "react";
-
-import { classes as cls, getColor, View, ScrollView } from "tw";
+import { classes as cls, View, ScrollView } from "tw";
 import { useUserStore } from "src/stores/user";
-
-import { Title, Subtitle, Text } from "components/typography";
+import { Title, Text } from "components/typography";
 
 import Card from "components/Card"
 import Badge from "components/Badge"
-import LogoutButton from "components/LogoutButton";
 import Stack from "components/layout/Stack";
-import Avatar from "components/Avatar";
 import Navbar from "./parts/Nav";
-
-import Input from "components/form/Input"
 import Button from "components/form/Button"
 
 export default function DemandesPages({ navigation }) {
@@ -49,6 +43,7 @@ export default function DemandesPages({ navigation }) {
             </Stack>
           </Card.Content>
         </Card>
+
         <Card direction="vertical">
           <Card.Title>Ticket n2</Card.Title>
           <Card.Content>
