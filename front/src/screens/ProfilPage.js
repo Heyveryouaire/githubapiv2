@@ -12,11 +12,13 @@ export default function ProfilPage({ navigation }) {
   // const token = useUser(({ token }) => token);
   const setToken = useUserStore(({ token }) => token)
   const [ error, setError ] = useState(null)
+  const [ success, setSuccess] = useState(null)
+
   const [ loading, setLoading ] = useState(false)
   const { updateProfil , getUserToken } = useUser()
 
 
-  const [showSnack, setShowSnack] = useState(false);useUserStore
+  // const [showSnack, setShowSnack] = useState(false);useUserStore
 
   const fakeSubmit = async params => {
     console.log("PROFILPAGE ", params);
@@ -24,7 +26,7 @@ export default function ProfilPage({ navigation }) {
   setLoading(true);
     try {
       await updateProfil(params, setToken);
-      token(getUserToken());
+      setSuccess(true)
     } catch (err) {      
       setError(err);
       setLoading(false);
@@ -55,7 +57,10 @@ export default function ProfilPage({ navigation }) {
             onSubmit={fakeSubmit}
             submissionError={error}
             clearSubmissionError={clearError}
-            submissionLoading={loading}>
+            submissionLoading={loading}
+            success={success}
+            >
+
           </ProfilBase>
 
         </Stack>

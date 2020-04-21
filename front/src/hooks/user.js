@@ -36,13 +36,13 @@ const userActions = setUser => ({
       phone: phone
     }, token)// Si j'ajoutais le token ici ? y'a moyen
 
-    if(results && results.tokens){    
+    console.log( "resultats: ", results )
+    if(results){    
       console.log("hi there");
-        
       userApi.setState(results)
       setUser(results)
     } else {
-      throw new Error("bad bad bad ")
+      throw new Error("Impossible de mettre le profil à jour")
     }
   },
   
@@ -54,7 +54,6 @@ const userActions = setUser => ({
         size: fileValue.size,
         uri: fileValue.uri,
       })
-    
       // Catch the ext file, then apply or not 'markdown' to github issues
       let convertLink
       const regexExt = /\.[a-z]+$/i
@@ -78,7 +77,7 @@ const userActions = setUser => ({
       userApi.setState(results)
       setUser(results)
     } else {
-      throw new Error("bad bad bad ")
+      throw new Error("Impossible de créer une nouvelle issue")
     }
   },
 

@@ -13,7 +13,8 @@ export function ProfilBase({
   onSubmit,
   submissionError,
   clearSubmissionError,
-  submissionLoading
+  submissionLoading,
+  success
 }) {
   classes = classes || {};
   classes.container = classes.container || [];
@@ -106,6 +107,11 @@ export function ProfilBase({
           <FlashBox.Error>
             Impossible de modifier votre profil
           </FlashBox.Error>
+        )}
+        {success && (
+          <FlashBox.Success>
+            Votre profil à bien été mis à jour !
+          </FlashBox.Success>
         )}
         <Input
           autoFocus

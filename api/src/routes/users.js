@@ -391,14 +391,19 @@ module.exports = (context, middlewares) => {
 
     try {
 
-      console.log(req.user.id);
+      console.log("req.user.id = ",req.user.id);
       
-      // La modification se fait, meme si ca me jete 
-      // voir avec google ? 
+      // La mise à jour se fait correctement, mais un message d'erreur se fait a cause de 
+      // google storage , a voir pour modifié ca
+
       // req.user.id works, mais pas req.user.entityKey.id
+
+      // const user = await UserService.User.update(req.user.id, properties)
+      // emit(req.user.id, EVENTS.USER_UPDATED, { user: user.plain(), properties })
+      // res.status(202).send(cleanPrivateInfos(user.plain()))
+
       const user = await UserService.User.update(req.user.id, properties)
-      emit(req.user.id, EVENTS.USER_UPDATED, { user: user.plain(), properties })
-      res.status(202).send(cleanPrivateInfos(user.plain()))
+      res.status(200).json({ status: "done"})
     } catch (err) {
       err.statusCode = err.statusCode || 400
       next(err)
