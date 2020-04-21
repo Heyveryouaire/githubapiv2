@@ -1,19 +1,22 @@
-import React, { useRef, useEffect, useCallback, useMemo } from "react";
+import React, { useRef, useEffect, useCallback, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigation } from "@react-navigation/native";
+import * as DocumentPicker from 'expo-document-picker'
 
 import { classes as cls, View } from "tw";
 
 import Input from "./form/Input";
 import Button from "./form/Button";
 import FlashBox from "./form/FlashBox";
+import Radio from "./form/Radio"
 
 export function TicketBase({
   classes,
   onSubmit,
   submissionError,
   clearSubmissionError,
-  submissionLoading
+  submissionLoading,
+  success
 }) {
   classes = classes || {};
   classes.container = classes.container || [];
@@ -25,6 +28,7 @@ export function TicketBase({
 
   // const usernameRef = useRef(null);
   const passwordRef = useRef(null);
+  const [radio, setRadio] = useState(null)
   // const fgtPasswd = useRef(null);
 
   const {
@@ -39,7 +43,9 @@ export function TicketBase({
         label: labelValue,
         date: dateValue,
         project: projectValue,
-        body: bodyValue
+        body: bodyValue,
+        file: fileValue
+        // radio: radioValue
      } = getValues();
 
   // const onLabelSubmit = useCallback(() => {
@@ -67,6 +73,10 @@ export function TicketBase({
     register("body", {
       required: "Une description est requise"
     })
+    register("fileValue", {})
+    // register("radio", {
+    //   required : "Il faut un projet"
+    // })
   }, [register]);
 
   const submit = useMemo(() => handleSubmit(onPasswordSubmit), [
@@ -101,15 +111,19 @@ export function TicketBase({
 
     return () => navigation.removeListener("blur", listener);
   }, [navigation]);
-
+  // console.log(submissionError)
   return (
     <View style={[...cls`justify-center items-center`, ...classes.container]}>
       <View style={cls`w-full`}>
-        {/* Ca s'affiche, mais ca marche, damn */}
         {submissionError && (
           <FlashBox.Error>
             Impossible d'envoyer votre ticket
           </FlashBox.Error>
+        )}
+        {success && (
+          <FlashBox.Success>
+            Votre ticket à bien été transmis !
+          </FlashBox.Success>
         )}
         <Input
           autoFocus
@@ -122,7 +136,7 @@ export function TicketBase({
             clearSubmissionError();
             setValue("label", value);
           }}
-          onSubmitEditing={submit}
+          // onSubmitEditing={submit}
           error={errors && errors.label && errors.label.message}
         />
         <Input
@@ -135,23 +149,36 @@ export function TicketBase({
             clearSubmissionError();
             setValue("date", value);
           }}
-          onSubmitEditing={submit}
+          // onSubmitEditing={submit}
           error={errors && errors.date && errors.date.message}
         />
-        <Input
+          <Radio.Group 
+            value={projectValue} 
+            onValueChange={value => {
+              clearError();
+              clearSubmissionError();
+              setValue("project", value);
+            }}
+            // onSubmitEditing={submit}
+            error={errors && errors.project && errors.project.message}
+          >
+            <Radio.Button value="graphql2" label="Graphql2"></Radio.Button>
+            <Radio.Button value="boum" label="Boum"></Radio.Button>
+          </Radio.Group>
+
+        {/* <Input
           classes={classes}
           label="Project"
-          placeholder="Selectionner le projet"
+          placeholder="Selectionner le projet (graphql2)"
           value={projectValue}
           onValueChange={value => {
             clearError();
             clearSubmissionError();
             setValue("project", value);
           }}
-          onSubmitEditing={submit}
+          // onSubmitEditing={submit}
           error={errors && errors.project && errors.project.message}
-        />
-        {/* Useless password, user musyt be already connected anyway*/}
+        /> */}
         <Input
           classes={classes}
           label="Description"
@@ -162,23 +189,21 @@ export function TicketBase({
             clearSubmissionError();
             setValue("body", value);
           }}
-          onSubmitEditing={submit}
+          // onSubmitEditing={submit}
           error={errors && errors.body && errors.body.message}
         />
-        {/* <Input
-          classes={classes}
-          label="Insérer un fichier"
-          placeholder=".jpg, .png, .zip .."
-          value={passwordValue}
-          onValueChange={value => {
-            clearError();
-            clearSubmissionError();
-            setValue("password", value);
-          }}
-          onSubmitEditing={submit}
-          error={errors && errors.username && errors.password.message}
-          inputRef={passwordRef}
-        /> */}
+
+        <Button
+        value={fileValue}
+          onPress={ async () => {
+            const path = await DocumentPicker.getDocumentAsync({})
+            setValue("fileValue", path)
+          }
+        }
+         
+        >
+          Choisir un fichier
+        </Button>
         <View style={cls`w-full`}>
           <Button
             onPress={!submissionLoading && submit}

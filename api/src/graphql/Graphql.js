@@ -151,7 +151,6 @@ class Graphql extends AbstractGraphql{
                     reject("Cannot find the repository for this account")
                 }
                 resolve(rep)
-                console.log(rep);
                 
             }).catch((err) => {
                 console.log(err);
@@ -173,7 +172,6 @@ class Graphql extends AbstractGraphql{
         })
         .then(() => {
             console.log("Query looks like to works fine !");
-            
             return this.sendRequest()
         })
 

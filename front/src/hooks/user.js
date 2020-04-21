@@ -4,7 +4,6 @@ import { userApi, useUserStore } from "../stores/user";
 
 const storedUser = userApi.getState();
 
-
 const userActions = setUser => ({
   async login({ username, password }) {
     const { results } = await Api.signin({ username, password });
@@ -29,7 +28,6 @@ const userActions = setUser => ({
     }
   },
   async updateProfil({ nom, prenom, company, email, phone}, token) { 
-    console.log("test storedUser ", storedUser);  
     const { results }  = await Api.updateProfil({
       lastname : nom,
       firstname : prenom,
@@ -49,21 +47,34 @@ const userActions = setUser => ({
   },
   
 
-  async createIssue({ label, date, project, body}) {   
+  async createIssue({ label, date, project, body, fileValue}) {   
+      // First request to post the file on google cloud storage
+      const url = await Api.googleIt({
+        name: fileValue.name,
+        size: fileValue.size,
+        uri: fileValue.uri,
+      })
+    
+      // Catch the ext file, then apply or not 'markdown' to github issues
+      let convertLink
+      const regexExt = /\.[a-z]+$/i
+      const found = url.results.link.match(regexExt)
+      const ext = found[0].substring(1)
+      console.log(ext)
+
+      if(ext === "jpeg" || ext === "png" || ext === "jpg"){
+        convertLink = `\n ![image](${url.results.link})`
+      }else{
+        convertLink = `\n ${url.results.link}`
+      }
+      
     const { results }  = await Api.createIssue({
-      // login is add manually for now
-      login : "",
       title : `${label} - ${date}`,
-      body : body,
+      body : body + convertLink,
       repositoryName : project,
-      // token is add manually for now
-      token : ""
     })
-    // if(results && results.token){
-    // Je ne retourne pas de token ....
-    // ca doit etre ici que l'erreur sur ticketpage se genere 
+
     if(results){      
-      console.log("ICI CA PASSE FAUT PAS DEC !!")
       userApi.setState(results)
       setUser(results)
     } else {
@@ -76,6 +87,7 @@ const userActions = setUser => ({
     resetApp();
     setUser(null);
   }
+  
 });
 
 const UserContext = React.createContext();
@@ -108,14 +120,23 @@ export function useUser() {
     });
   };
 
-  const createIssue = async ({ label, date, project, body}) => {
+  const createIssue = async ({ label, date, project, body, fileValue}) => {
     setLoading(true)
     setError(null)
     await userContext.actions.createIssue({
       label,
       date,
       project,
-      body
+      body,
+      fileValue
+    })
+  }
+
+  const googleIt = async ({fileValue }) => {
+    setLoading(true)
+    setError(null)
+    await userContext.actions.googleIt({
+      fileValue
     })
   }
 
@@ -151,6 +172,7 @@ export function useUser() {
     logOut,
     getUserToken,
     createIssue,
-    updateProfil
+    updateProfil,
+    googleIt
   };
 }

@@ -4,7 +4,8 @@ import { API_URL } from "./constants";
 const ROUTES = {
   USERS: `${API_URL}/users`,
   STEPS: `${API_URL}/steps`,
-  CREATEISSUE : `${API_URL}/githubapi`
+  CREATEISSUE : `${API_URL}/githubapi`,
+  GOOGLEIT : `${API_URL}/googleit`
 };
 const DEFAULT_HEADERS = {
   "Content-Type": "application/json"
@@ -29,7 +30,7 @@ function request(method, url, { token, body, query, fileName } = {}) {
       : DEFAULT_HEADERS,
     body: body ? JSON.stringify(body) : undefined
   };
-  console.log(options);
+  // console.log(options);
   
   // Object.entries(options.headers).forEach(([key, value]) => console.log(key, ':', value))
   return new Promise((resolve, reject) => {
@@ -170,5 +171,8 @@ export default {
       body: params, 
       token
     })
+  },
+  googleIt: params => {  
+    return post(`${ROUTES.GOOGLEIT}`, {body: params})
   }
 };

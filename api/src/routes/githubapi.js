@@ -1,16 +1,12 @@
 //@ts-check
 'use strict'
-
 const router = require('express').Router()
-const cors = require("cors")
-
-router.use(cors())
-
 const Graphql = require("../graphql/Graphql")
 let graph = new Graphql()
 
 module.exports = (context, _middlewares) => {
 
+  // QUERY SECTION
   router.get("/", (req, res) => {
     graph.queryRepoId({
       login: process.env.GITHUB_USERNAME,
@@ -39,20 +35,6 @@ module.exports = (context, _middlewares) => {
       login: process.env.GITHUB_USERNAME
     }).then(rep => {
       res.send(rep)
-    })
-  })
-
-  router.post("/createIssue", (req, res) => {    
-    console.log(req.body);
-    graph.mutationCreateIssue({
-      title: req.body.title,
-      body: req.body.body,
-      login: process.env.GITHUB_USERNAME,
-      repositoryName: req.body.repositoryName
-    }).then(rep => {      
-      console.log(JSON.stringify(rep));
-      
-      res.status(200).json(rep)
     })
   })
 
@@ -92,6 +74,20 @@ module.exports = (context, _middlewares) => {
       res.send(rep)
     })
   })
+
+  // MUTATION SECTION
+  router.post("/createIssue", (req, res) => {    
+    graph.mutationCreateIssue({
+      title: req.body.title,
+      body: req.body.body,
+      login: process.env.GITHUB_USERNAME,
+      repositoryName: req.body.repositoryName
+    }).then(rep => {      
+      res.status(200).json(rep)
+    })
+  })
+
+  
   //   const { MyModel } = require('../db')(context.env.GCLOUD_PROJECT, process.env.GCLOUD_DATASTORE_NAMESPACE)
 
   //   // Need to be declared after router routes declaration to not override them.

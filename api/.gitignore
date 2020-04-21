@@ -8,3 +8,4 @@ dev-datastore-credentials.json
 config/.env
 config/test/*.json
 .vscode/
+key.json
