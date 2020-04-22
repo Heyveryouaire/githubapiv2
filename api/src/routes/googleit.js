@@ -16,11 +16,11 @@ router.post("/", async (req, res, next) => {
 
         // base64 decode 
         const string = req.body.uri
-        const regex = /^data:.+\/(.+);base64,(.*)$/;
+        const regex = /^data:.+\/(.+);base64,(.*)$/
 
-        const matches = string.match(regex);
-        const data = matches[2];
-        const buffer = Buffer.from(data, 'base64');
+        const matches = string.match(regex)
+        const data = matches[2]
+        const buffer = Buffer.from(data, 'base64')
         const fileName = Date.now() + "."
 
         // Extension matcher

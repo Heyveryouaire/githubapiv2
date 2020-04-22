@@ -380,34 +380,31 @@ module.exports = (context, middlewares) => {
     const availableProperties = ["firstname", "lastname", "email", "phone", "organisation", "push_notifications", "sms_notifications", "company"]
     // const availableProperties = ["firstname", "lastname", "email", "phone", "company"]
     const requestedFields = Object.keys(req.body)
-
     let properties = {}
-
     requestedFields.forEach(f => {
       if (availableProperties.includes(f)) {
         properties[f] = req.body[f]
       }
     })
-
-    try {
-
-      console.log("req.user.id = ",req.user.id);
-      
-      // La mise à jour se fait correctement, mais un message d'erreur se fait a cause de 
-      // google storage , a voir pour modifié ca
-
-      // req.user.id works, mais pas req.user.entityKey.id
-
-      // const user = await UserService.User.update(req.user.id, properties)
-      // emit(req.user.id, EVENTS.USER_UPDATED, { user: user.plain(), properties })
-      // res.status(202).send(cleanPrivateInfos(user.plain()))
-
+    try { // Update the profil with the new data enter by the user
       const user = await UserService.User.update(req.user.id, properties)
-      res.status(200).json({ status: "done"})
-    } catch (err) {
+
+      if (user && (user.roles.includes(CONSTANTS.ROLES.USER) || user.roles.includes(CONSTANTS.ROLES.ADMIN))) {
+        const tokens = await UserService.generateJWTTokens(user.id) // Generate new token
+        let userJSON = user
+        userJSON.tokens = tokens
+        console.log(userJSON)
+        res.status(200).json(userJSON)
+      } else {
+        const err = new ErrorWithStatusCode("L'utilisateur n'existe pas ou le mot de passe n'est pas valide.", 404)
+        next(err)
+      }
+    }catch (err) {
       err.statusCode = err.statusCode || 400
       next(err)
     }
+      
+
   })
 
   /**

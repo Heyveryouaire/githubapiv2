@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { classes as cls, color, View, ScrollView } from "tw";
-import { useUserStore } from "src/stores/user";
+import { useUserStore, userApi } from "src/stores/user";
 import { Title} from "components/typography";
 
 import Stack from "components/layout/Stack";
@@ -9,24 +9,23 @@ import { ProfilBase } from "../components/Profil";
 import { useUser } from "src/hooks/user"
 
 export default function ProfilPage({ navigation }) {
-  // const token = useUser(({ token }) => token);
-  const setToken = useUserStore(({ token }) => token)
+  const token = useUserStore(({ token }) => token)
   const [ error, setError ] = useState(null)
   const [ success, setSuccess] = useState(null)
+  const setToken = useUserStore(({ setToken}) => setToken)
 
+  const profilUser = userApi.getState()
   const [ loading, setLoading ] = useState(false)
   const { updateProfil , getUserToken } = useUser()
-
 
   // const [showSnack, setShowSnack] = useState(false);useUserStore
 
   const fakeSubmit = async params => {
-    console.log("PROFILPAGE ", params);
-    
   setLoading(true);
     try {
-      await updateProfil(params, setToken);
+      await updateProfil(params, token);
       setSuccess(true)
+      setToken(token)
     } catch (err) {      
       setError(err);
       setLoading(false);
@@ -47,10 +46,8 @@ export default function ProfilPage({ navigation }) {
 
       <Title>Gestion de compte</Title>
       <Navbar navigation={navigation}></Navbar>
-
       <View style={cls`w-1/2 bg-white`}>
         <Stack vertical style={cls`w-full`}>
-        
           <ProfilBase
             color={color.blue600}
             errorColor={color.red500}
@@ -59,6 +56,7 @@ export default function ProfilPage({ navigation }) {
             clearSubmissionError={clearError}
             submissionLoading={loading}
             success={success}
+            profilUser={profilUser}
             >
 
           </ProfilBase>

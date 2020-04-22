@@ -14,7 +14,8 @@ export function ProfilBase({
   submissionError,
   clearSubmissionError,
   submissionLoading,
-  success
+  success,
+  profilUser
 }) {
   classes = classes || {};
   classes.container = classes.container || [];
@@ -26,6 +27,7 @@ export function ProfilBase({
 
   // const usernameRef = useRef(null);
   const passwordRef = useRef(null);
+  console.log(" le profilUser vue du profil",profilUser)
   // const fgtPasswd = useRef(null);
 
   const {
@@ -37,8 +39,8 @@ export function ProfilBase({
     clearError
   } = useForm();
   const { 
-        nom: nomValue,
-        prenom: prenomValue,
+        lastname: nomValue,
+        firstname: prenomValue,
         company: companyValue,
         email: emailValue,
         phone: phoneValue
@@ -57,8 +59,8 @@ export function ProfilBase({
 
   // Here we add the post data
   useEffect(() => {
-    register("nom", {});
-    register("prenom", {});
+    register("lastname", {});
+    register("firstname", {});
     register("email", {})
     register("company", {})
     register("phone", {})
@@ -73,11 +75,11 @@ export function ProfilBase({
 
   useEffect(() => {
     const listener = navigation.addListener("focus", () => {
-      setValue("nom", "");
-      setValue("prenom", "");
-      setValue("company", "")
-      setValue("email", "")
-      setValue("phone", "")
+      setValue("lastname", profilUser.lastname);
+      setValue("firstname", profilUser.firstname);
+      setValue("company", profilUser.company)
+      setValue("email", profilUser.email)
+      setValue("phone", profilUser.phone)
       clearError();
       clearSubmissionError();
     });
@@ -87,11 +89,11 @@ export function ProfilBase({
 
   useEffect(() => {
     const listener = navigation.addListener("blur", () => {
-      setValue("nom", "");
-      setValue("prenom", "");
-      setValue("company", "")
-      setValue("email", "")
-      setValue("phone", "")
+      setValue("lastname", profilUser.lastname);
+      setValue("firstname", profilUser.firstname);
+      setValue("company", profilUser.company)
+      setValue("email", profilUser.email)
+      setValue("phone", profilUser.phone)
       clearError();
       clearSubmissionError();
     });
@@ -99,7 +101,8 @@ export function ProfilBase({
     return () => navigation.removeListener("blur", listener);
   }, [navigation]);
 
-  return (
+  return ( 
+   
     <View style={[...cls`justify-center items-center`, ...classes.container]}>
       <View style={cls`w-full`}>
         {/* Ca s'affiche, mais ca marche, damn */}
@@ -122,7 +125,7 @@ export function ProfilBase({
           onValueChange={value => {
             clearError();
             clearSubmissionError();
-            setValue("nom", value);
+            setValue("lastname", value);
           }}
           onSubmitEditing={submit}
           error={errors && errors.nom && errors.nom.message}
@@ -135,7 +138,7 @@ export function ProfilBase({
           onValueChange={value => {
             clearError();
             clearSubmissionError();
-            setValue("prenom", value);
+            setValue("firstname", value);
           }}
           onSubmitEditing={submit}
           error={errors && errors.prenom && errors.prenom.message}

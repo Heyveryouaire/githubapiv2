@@ -168,7 +168,7 @@ export default {
   },
   updateProfil: (params, token) => {
     return patch(`${ROUTES.USERS}`, { 
-      body: params, 
+      body: params,
       token
     })
   },

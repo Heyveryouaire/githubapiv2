@@ -27,34 +27,30 @@ const userActions = setUser => ({
       throw new Error("bad credentials");
     }
   },
-  async updateProfil({ nom, prenom, company, email, phone}, token) { 
-    const { results }  = await Api.updateProfil({
-      lastname : nom,
-      firstname : prenom,
-      company: company,
-      email: email,
-      phone: phone
-    }, token)// Si j'ajoutais le token ici ? y'a moyen
-
-    console.log( "resultats: ", results )
+  async updateProfil({ lastname, firstname, company, email, phone}, token) { 
+      const { results }  = await Api.updateProfil({
+        lastname : lastname,
+        firstname : firstname,
+        company: company,
+        email: email,
+        phone: phone
+      }, token)// Si j'ajoutais le token ici ? y'a moyen
+      
     if(results){    
-      console.log("hi there");
       userApi.setState(results)
       setUser(results)
     } else {
       throw new Error("Impossible de mettre le profil à jour")
     }
   },
-  
 
   async createIssue({ label, date, project, body, fileValue}) {   
-      // First request to post the file on google cloud storage
       const url = await Api.googleIt({
         name: fileValue.name,
         size: fileValue.size,
         uri: fileValue.uri,
       })
-      // Catch the ext file, then apply or not 'markdown' to github issues
+
       let convertLink
       const regexExt = /\.[a-z]+$/i
       const found = url.results.link.match(regexExt)
@@ -139,12 +135,12 @@ export function useUser() {
     })
   }
 
-  const updateProfil = async ({ nom, prenom, company, email, phone }, token) => {
+  const updateProfil = async ({ lastname, firstname, company, email, phone }, token) => {
     setLoading(true)
     setError(null)
     await userContext.actions.updateProfil({
-      nom,
-      prenom,
+      lastname,
+      firstname,
       company,
       email,
       phone
