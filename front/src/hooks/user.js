@@ -37,6 +37,7 @@ const userActions = setUser => ({
       }, token)// Si j'ajoutais le token ici ? y'a moyen
       
     if(results){    
+      delete results.token
       userApi.setState(results)
       setUser(results)
     } else {
@@ -76,6 +77,22 @@ const userActions = setUser => ({
       throw new Error("Impossible de créer une nouvelle issue")
     }
   },
+
+  async viewListIssue({ repositoryName }) { 
+    const { results }  = await Api.viewListIssue({
+     repositoryName: repositoryName
+    })
+    
+    console.log("les resultats vue de hooks user", results)
+  // if(results){    
+  //   userApi.setState(results)
+  //   setUser(results)
+  // } else {
+  //   throw new Error("Impossible de chercher les projets")
+  // }
+  return results
+
+},
 
   logout() {
     const resetApp = useUserStore(({ resetApp }) => resetApp);
@@ -127,6 +144,14 @@ export function useUser() {
     })
   }
 
+  const viewListIssue = async ( { repositoryName }) => {
+    setLoading(true)
+    setError(null)
+    return await userContext.actions.viewListIssue({
+      repositoryName
+    })
+  }
+
   const googleIt = async ({fileValue }) => {
     setLoading(true)
     setError(null)
@@ -168,6 +193,7 @@ export function useUser() {
     getUserToken,
     createIssue,
     updateProfil,
-    googleIt
+    googleIt,
+    viewListIssue
   };
 }

@@ -174,5 +174,12 @@ export default {
   },
   googleIt: params => {  
     return post(`${ROUTES.GOOGLEIT}`, {body: params})
+  },
+  viewListIssue : (params, token) => {
+    console.log("api", params)
+    return post(`${ROUTES.CREATEISSUE}/viewListIssue`, {
+      body: params,
+      token
+    })
   }
 };

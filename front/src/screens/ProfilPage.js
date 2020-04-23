@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { classes as cls, color, View, ScrollView } from "tw";
 import { useUserStore, userApi } from "src/stores/user";
 import { Title} from "components/typography";
@@ -12,20 +12,15 @@ export default function ProfilPage({ navigation }) {
   const token = useUserStore(({ token }) => token)
   const [ error, setError ] = useState(null)
   const [ success, setSuccess] = useState(null)
-  const setToken = useUserStore(({ setToken}) => setToken)
-
-  const profilUser = userApi.getState()
+  let profilUser = userApi.getState()
   const [ loading, setLoading ] = useState(false)
-  const { updateProfil , getUserToken } = useUser()
-
-  // const [showSnack, setShowSnack] = useState(false);useUserStore
+  const { updateProfil } = useUser()
 
   const fakeSubmit = async params => {
   setLoading(true);
     try {
-      await updateProfil(params, token);
+      await updateProfil(params, token)
       setSuccess(true)
-      setToken(token)
     } catch (err) {      
       setError(err);
       setLoading(false);

@@ -27,7 +27,6 @@ export function ProfilBase({
 
   // const usernameRef = useRef(null);
   const passwordRef = useRef(null);
-  console.log(" le profilUser vue du profil",profilUser)
   // const fgtPasswd = useRef(null);
 
   const {

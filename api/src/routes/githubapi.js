@@ -87,6 +87,41 @@ module.exports = (context, _middlewares) => {
     })
   })
 
+  router.post("/viewListIssue", (req, res) => {
+    graph.queryIssueComment({
+      login: process.env.GITHUB_USERNAME,
+      repositoryName: req.body.repositoryName,
+      issueNum: 4,
+      commentsNum: 2
+    }).then( rep => {
+      const ticket = []
+      let repositories = rep.data.user.repository.issues.edges
+      repositories.forEach(repository => {
+        // if(repository.node.comments.edges.length >= 1){ // If there's one comment on the issue
+          let ticketIssueTitle = repository.node.title
+          let comments = repository.node.comments.edges
+          let ticketIssueComments = []
+          for(let x=0; x< comments.length; x++){ 
+            if(comments.hasOwnProperty(x)){
+              ticketIssueComments.push({
+                body: comments[x].node.body,
+                createdAt: comments[x].node.createdAt
+              })
+            } 
+          }
+          ticket.push({ ticketIssueTitle, ticketIssueComments})         
+        // }
+      });
+      console.log(ticket)
+      res.status(200).json(ticket)
+    })
+    .catch(err => {
+      console.log("impossible de requeter github", err)
+      res.status(404).send("Projet non trouvé")
+    }) 
+
+  })
+
   
   //   const { MyModel } = require('../db')(context.env.GCLOUD_PROJECT, process.env.GCLOUD_DATASTORE_NAMESPACE)
 

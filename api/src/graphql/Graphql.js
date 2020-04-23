@@ -105,6 +105,50 @@ class Graphql extends AbstractGraphql{
             })
         })
     }
+
+    /**
+     * 
+     * @param {string} login: github username
+     * @param {string} repositoryName: name of the repo 
+     * @param {int} issueNum: number of issue to return 
+     * @param {int} commentsNum: number of comments to return
+     */
+    queryIssueComment(data) {
+        return new Promise((resolve, reject) => {
+            this.query = `
+            query queryIssueComment($login: String!, $repositoryName: String!, $issueNum: Int!, $commentsNum: Int! ){ 
+                user(login:$login){
+                  repository(name: $repositoryName){
+                    name,
+                    issues(last: $issueNum){
+                      edges{
+                        node{
+                          title,
+                          comments(last: $commentsNum){
+                            edges{
+                              node{
+                                body,
+                                createdAt
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+        `
+                this.setVariables(data)   
+                resolve()       
+        }).then(() => {
+            console.log("query ok")
+            return this.sendRequest()
+        })
+    }
+
+
+
     /**
  * 
  * MUTATION BLOCK

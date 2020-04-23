@@ -390,11 +390,12 @@ module.exports = (context, middlewares) => {
       const user = await UserService.User.update(req.user.id, properties)
 
       if (user && (user.roles.includes(CONSTANTS.ROLES.USER) || user.roles.includes(CONSTANTS.ROLES.ADMIN))) {
-        const tokens = await UserService.generateJWTTokens(user.id) // Generate new token
-        let userJSON = user
-        userJSON.tokens = tokens
-        console.log(userJSON)
-        res.status(200).json(userJSON)
+        // const tokens = await UserService.generateJWTTokens(user.id) // Generate new token
+        // let userJSON = user
+        // userJSON.tokens = tokens
+        // console.log(userJSON)
+        // res.status(200).json(userJSON)
+        res.status(200).json(user)
       } else {
         const err = new ErrorWithStatusCode("L'utilisateur n'existe pas ou le mot de passe n'est pas valide.", 404)
         next(err)

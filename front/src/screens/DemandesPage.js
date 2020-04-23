@@ -1,19 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { classes as cls, View, ScrollView } from "tw";
-import { useUserStore } from "src/stores/user";
-import { Title, Text } from "components/typography";
+import { useUserStore, userApi } from "src/stores/user";
+import { Title} from "components/typography";
 
-import Card from "components/Card"
-import Badge from "components/Badge"
 import Stack from "components/layout/Stack";
 import Navbar from "./parts/Nav";
-import Button from "components/form/Button"
+import { DemandeBase } from "/components/Demande";
+import { useUser } from "src/hooks/user"
 
-export default function DemandesPages({ navigation }) {
-  const token = useUserStore(({ token }) => token);
+export default function DemandesPage({ navigation }) {
+  const token = useUserStore(({ token }) => token)
+  const { viewListIssue } = useUser()
+  const [ issues, setIssues ] = useState()
 
-  const [showSnack, setShowSnack] = useState(false);
-  console.log("HomePage -> showSnack", showSnack);
+  let userRepos = [
+    { name : "graphql2" },
+    { name : "exo"},
+    { name : "boum"}
+  ]
+
+    useEffect( () => {     
+      async function putData () {
+        for(let x=0; x<userRepos.length; x++){     
+          userRepos[x].issues = await viewListIssue( { repositoryName: userRepos[x].name })
+        }
+        setIssues( userRepos )
+      } putData()
+    }, [])
 
   return (
     <ScrollView
@@ -25,43 +38,19 @@ export default function DemandesPages({ navigation }) {
       <Navbar navigation={navigation}></Navbar>
 
       <View style={cls`w-1/2 bg-white`}>
+        <Stack vertical style={cls`w-full`}>
 
-        <Card direction="vertical">
-          <Card.Title>Ticket n1</Card.Title>
-          <Card.Content>
-            <Stack vertical style={cls`w-full`}>
-              <Stack horizontal style={cls`w-full flex-wrap`}>
-                <Badge.Info>Info des devs</Badge.Info>
-              </Stack>
-              <Text>
-                Message de mon ticket ... 
-              </Text>
-              <Stack horizontal style={cls`w-auto flex-1 items-center justify-around`}>
-                <Button>Annuler le ticket</Button>
-                <Button>Editer le ticket</Button>
-              </Stack>
-            </Stack>
-          </Card.Content>
-        </Card>
+          {issues && issues.map( (userRepo, index) => {
+            return (
+              <DemandeBase 
+              key={index}
+              repositoryName={userRepo.name}
+              issues={userRepo.issues}
+              />
 
-        <Card direction="vertical">
-          <Card.Title>Ticket n2</Card.Title>
-          <Card.Content>
-            <Stack vertical style={cls`w-full`}>
-              <Stack horizontal style={cls`w-full flex-wrap`}>
-                <Badge.Success>Correction terminée</Badge.Success>
-              </Stack>
-              <Text>
-                Message de mon ticket ... 
-              </Text>
-              <Stack horizontal style={cls`w-auto flex-1 items-center justify-around`}>
-                <Button>Annuler le ticket</Button>
-                <Button>Editer le ticket</Button>
-              </Stack>
-            </Stack>
-          </Card.Content>
-        </Card>
-
+            )
+          })}
+        </Stack>
       </View>
     </ScrollView>
   );

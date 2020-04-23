@@ -44,7 +44,8 @@ class AbstractGraphql {
             },
             login: data.login,
             repositoryName: data.repositoryName,
-            issueNum: data.issueNum
+            issueNum: data.issueNum,
+            commentsNum: data.commentsNum
         }
         
     }
