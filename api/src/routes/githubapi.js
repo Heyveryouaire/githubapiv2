@@ -48,13 +48,14 @@ module.exports = (context, _middlewares) => {
     })
   })
 
-  router.get("/updateIssue", (req, res) => {
+  router.post("/updateIssue", (req, res) => {
+    console.log(req.body)
     graph.mutationUpdateIssue({
-      id: "MDU6SXNzdWU1OTM0NDQ0NDI=",
-      title: "Un titre meilleur",
-      body: "Et un commentaire toujours inutile"
+      id: req.body.id,
+      title: req.body.title,
+      body: req.body.body
     }).then(rep => {
-      res.send(rep)
+      res.status(200).json(rep)
     })
   })
 
@@ -99,24 +100,24 @@ module.exports = (context, _middlewares) => {
       repositories.forEach(repository => {
         // if(repository.node.comments.edges.length >= 1){ // If there's one comment on the issue
           let ticketIssueTitle = repository.node.title
+          let ticketIssueBody = repository.node.body
+          let ticketIssueId = repository.node.id
           let comments = repository.node.comments.edges
           let ticketIssueComments = []
           for(let x=0; x< comments.length; x++){ 
             if(comments.hasOwnProperty(x)){
               ticketIssueComments.push({
                 body: comments[x].node.body,
-                createdAt: comments[x].node.createdAt
+                createdAt: comments[x].node.createdAt,
+                id: comments[x].node.id
               })
             } 
           }
-          ticket.push({ ticketIssueTitle, ticketIssueComments})         
-        // }
+          ticket.push({ ticketIssueId, ticketIssueTitle, ticketIssueBody,  ticketIssueComments})         
       });
-      console.log(ticket)
       res.status(200).json(ticket)
     })
     .catch(err => {
-      console.log("impossible de requeter github", err)
       res.status(404).send("Projet non trouvé")
     }) 
 

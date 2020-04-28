@@ -9,6 +9,8 @@ import Input from "./form/Input";
 import Button from "./form/Button";
 import FlashBox from "./form/FlashBox";
 import Radio from "./form/Radio"
+import Stack from "./layout/Stack"
+import { Title } from "../components/typography"
 
 export function TicketBase({
   classes,
@@ -39,14 +41,14 @@ export function TicketBase({
     errors,
     clearError
   } = useForm();
-  const { 
-        label: labelValue,
-        date: dateValue,
-        project: projectValue,
-        body: bodyValue,
-        file: fileValue
-        // radio: radioValue
-     } = getValues();
+  const {
+    label: labelValue,
+    date: dateValue,
+    project: projectValue,
+    body: bodyValue,
+    file: fileValue
+    // radio: radioValue
+  } = getValues();
 
   // const onLabelSubmit = useCallback(() => {
   //   passwordRef.current.focus();
@@ -114,7 +116,7 @@ export function TicketBase({
   // console.log(submissionError)
   return (
     <View style={[...cls`justify-center items-center`, ...classes.container]}>
-      <View style={cls`w-full`}>
+      <Stack vertical style={cls`w-2/3`}>
         {submissionError && (
           <FlashBox.Error>
             Impossible d'envoyer votre ticket
@@ -125,10 +127,25 @@ export function TicketBase({
             Votre ticket à bien été transmis !
           </FlashBox.Success>
         )}
+        <Title style={cls`text-white`}>Créer un ticket</Title>
+        <Radio.Group
+          value={projectValue}
+          onValueChange={value => {
+            clearError();
+            clearSubmissionError();
+            setValue("project", value);
+          }}
+
+          // onSubmitEditing={submit}
+          error={errors && errors.project && errors.project.message}
+        >
+          <Radio.Button value="graphql2" label="Graphql2"></Radio.Button>
+          <Radio.Button value="boum" label="Boum"></Radio.Button>
+        </Radio.Group>
         <Input
           autoFocus
           classes={classes}
-          label="Label"
+          label="Titre"
           placeholder="Problème, fonctionnalité, urgent"
           value={labelValue}
           onValueChange={value => {
@@ -152,33 +169,7 @@ export function TicketBase({
           // onSubmitEditing={submit}
           error={errors && errors.date && errors.date.message}
         />
-          <Radio.Group 
-            value={projectValue} 
-            onValueChange={value => {
-              clearError();
-              clearSubmissionError();
-              setValue("project", value);
-            }}
-            // onSubmitEditing={submit}
-            error={errors && errors.project && errors.project.message}
-          >
-            <Radio.Button value="graphql2" label="Graphql2"></Radio.Button>
-            <Radio.Button value="boum" label="Boum"></Radio.Button>
-          </Radio.Group>
 
-        {/* <Input
-          classes={classes}
-          label="Project"
-          placeholder="Selectionner le projet (graphql2)"
-          value={projectValue}
-          onValueChange={value => {
-            clearError();
-            clearSubmissionError();
-            setValue("project", value);
-          }}
-          // onSubmitEditing={submit}
-          error={errors && errors.project && errors.project.message}
-        /> */}
         <Input
           classes={classes}
           label="Description"
@@ -193,27 +184,33 @@ export function TicketBase({
           error={errors && errors.body && errors.body.message}
         />
 
-        <Button
-        value={fileValue}
-          onPress={ async () => {
-            const path = await DocumentPicker.getDocumentAsync({})
-            setValue("fileValue", path)
-          }
-        }
-         
+        <Stack horizontal style={cls`w-1/6 text-center py-4 my-4`}
         >
-          Choisir un fichier
-        </Button>
-        <View style={cls`w-full`}>
           <Button
+            value={fileValue}
+            onPress={async () => {
+              const path = await DocumentPicker.getDocumentAsync({})
+              setValue("fileValue", path)
+            }
+            }
+          >
+            Choisir un fichier
+        </Button>
+        </Stack>
+
+          <Stack horizontal style={cls`py-4 my-4 text-center justify-center`}>
+
+          <Button
+          color="green-600"
             onPress={!submissionLoading && submit}
             disabled={submissionLoading}
             loading={submissionLoading}
-          >
+            >
             Envoyer le ticket
           </Button>
-        </View>
-      </View>
+            </Stack>
+
+      </Stack>
     </View>
   );
 }

@@ -6,25 +6,43 @@ import Stack from "components/layout/Stack";
 
 import Button from "components/form/Button"
 import LogoutButton from "components/LogoutButton"
+import Link from "../../components/form/Link";
 
 export default function Navbar({ navigation }) {
 
   return (
     // page home is a model
-      <Stack horizontal style={cls`w-1/2 flex-1 items-center justify-around`}>
+      <Stack horizontal style={cls`w-full flex-1 items-center justify-start bg-gray-700`}>
         {/* <Button onPress={() => navigation.navigate("home")}>
             Accueil
         </Button> */}
-        <Button onPress={() => navigation.navigate("profilPage")}>
-            Gérer mon compte
-        </Button>
-        <Button onPress={() => navigation.navigate("demandesPage")}>
-          Voir mes demandes
-        </Button>
-        <Button onPress={() => navigation.navigate("ticketPage")}>
-            Se plaindre
-        </Button>
+        <Stack horizontal style={cls`w-1/3 flex justify-around items-center`}>
+
+        <Link 
+        onPress={() => navigation.navigate("profilPage")}
+        classes={{ text: `text-white`}}
+        >
+        Mon compte
+        </Link>
+
+        <Link 
+        classes={{ text: `text-white`}}
+        onPress={() => navigation.navigate("demandesPage")}
+        >
+          Mes demandes
+        </Link>
+
+        <Link 
+        onPress={() => navigation.navigate("ticketPage")}
+        classes={{ text: `text-white`}}
+
+        >
+          Envoyer un ticket
+        </Link>
+
         <LogoutButton />
+        </Stack>
+
       </Stack>
   );
 }

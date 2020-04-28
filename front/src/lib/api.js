@@ -1,10 +1,11 @@
 // import { storeApi } from '../store'
 import { API_URL } from "./constants";
+import { paramsApi } from "../stores/params";
 /* eslint-disable class-methods-use-this */
 const ROUTES = {
   USERS: `${API_URL}/users`,
   STEPS: `${API_URL}/steps`,
-  CREATEISSUE : `${API_URL}/githubapi`,
+  GITHUBAPI : `${API_URL}/githubapi`,
   GOOGLEIT : `${API_URL}/googleit`
 };
 const DEFAULT_HEADERS = {
@@ -164,7 +165,7 @@ export default {
     });
   },
   createIssue: params => {
-    return post(`${ROUTES.CREATEISSUE}/createIssue`, { body: params})
+    return post(`${ROUTES.GITHUBAPI}/createIssue`, { body: params})
   },
   updateProfil: (params, token) => {
     return patch(`${ROUTES.USERS}`, { 
@@ -176,10 +177,14 @@ export default {
     return post(`${ROUTES.GOOGLEIT}`, {body: params})
   },
   viewListIssue : (params, token) => {
-    console.log("api", params)
-    return post(`${ROUTES.CREATEISSUE}/viewListIssue`, {
+    return post(`${ROUTES.GITHUBAPI}/viewListIssue`, {
       body: params,
       token
+    })
+  },
+  updateIssue: (params) => {
+    return post(`${ROUTES.GITHUBAPI}/updateIssue`, {
+      body: params
     })
   }
 };

@@ -6,6 +6,7 @@ import { TicketBase } from "components/Ticket"
 
 import Navbar from "./parts/Nav";
 import { useUser } from "src/hooks/user" 
+import Stack from "components/layout/Stack"
 
 export default function TicketPage({ navigation }) {
   const [ error, setError ] = useState(null)
@@ -35,12 +36,14 @@ const clearError = useCallback(() => {
 
   return (
     <ScrollView
-      style={cls`flex-1 w-full h-full`}
-      contentContainerStyle={cls`m4 items-center justify-start`}
+      style={cls`flex-1 w-full h-full bg-gray-800`}
+      contentContainerStyle={cls`items-center justify-start`}
     >
-      <Title>Créer un ticket</Title>
       <Navbar navigation={navigation}></Navbar>
-      <View style={cls`w-full sm:w-full md:w-1/2 lg:w-1/2 xl:w1/2`}>
+      
+      <Stack vertical style={cls`w-2/3 m8 p8 bg-gray-700 rounded`}>
+
+      {/* <View style={cls`w-full sm:w-full md:w-1/2 lg:w-1/2 xl:w1/2`}> */}
         <TicketBase
           color={color.blue600}
           errorColor={color.red500}
@@ -49,9 +52,11 @@ const clearError = useCallback(() => {
           clearSubmissionError={clearError}
           submissionLoading={loading}
           success={success}
+          classes={{ input: `bg-white`, label : `text-white`}} // 2 classes breaks ?
           >
         </TicketBase>
-      </View>
+      {/* </View> */}
+      </Stack>
       
     </ScrollView>
   );

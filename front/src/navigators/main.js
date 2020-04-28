@@ -6,6 +6,7 @@ import HomePage from "../screens/HomePage";
 import TicketPage from "../screens/TicketPage";
 import ProfilPage from "../screens/ProfilPage";
 import DemandesPage from "../screens/DemandesPage"
+import DetailPage from '../screens/DetailPage'
 
 const Stack = createStackNavigator();
 
@@ -16,6 +17,7 @@ export default function MainNavigator() {
       <Stack.Screen name="ticketPage" component={withHistory(TicketPage)} />
       <Stack.Screen name="profilPage" component={withHistory(ProfilPage)} />
       <Stack.Screen name="demandesPage" component={withHistory(DemandesPage)} />
+      <Stack.Screen name="detailPage" component={withHistory(DetailPage)} />
     </Stack.Navigator>
   );
 }

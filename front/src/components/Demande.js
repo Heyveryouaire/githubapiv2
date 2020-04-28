@@ -4,10 +4,12 @@ import { Text } from "react-native"
 import { classes as cls, View } from "tw";
 
 import Card from "./Card"
-import Badge from "./Badge"
 import Stack from "./layout/Stack"
 import Button from "./form/Button";
+import { Title } from "./typography"
 import FlashBox from "./form/FlashBox";
+import Link from './form/Link'
+
 
 
 export function DemandeBase({
@@ -16,6 +18,7 @@ export function DemandeBase({
   success,
   repositoryName,
   issues,
+  navigation
 
 }) {
   classes = classes || {};
@@ -33,8 +36,8 @@ export function DemandeBase({
 
   return ( 
    
-    <View style={[...cls`justify-center items-center`, ...classes.container]}>
-      <View style={cls`w-full`}>
+    <View style={[...cls`justify-center items-center w-full`, ...classes.container]}>
+      <Stack vertical style={cls`w-full`}>
         {submissionError && (
           <FlashBox.Error>
             Impossible de modifier/supprimer le ticket
@@ -47,35 +50,36 @@ export function DemandeBase({
         )}
      
 
+
+            <Title style={cls`text-white`}> Mes demandes en cours</Title>
           {/* For each issue in the project */}
         { issues && issues.map( (issue, index) => {
           return (
-            <Card direction="vertical" key={index}>
-              <Card.Title>{repositoryName} - { issue.ticketIssueTitle }</Card.Title>
+            <Card direction="vertical" key={index} style={cls`bg-gray-700 border-gray-800`}>
+              <Card.Title style={cls`text-white`}>
+                { repositoryName }
+                </Card.Title>  
               <Card.Content>
-                <Stack vertical style={cls`w-full`}>
-                  {/* For each comments on the issue */}
-                { issue.ticketIssueComments.map( (comment, index) => {
-                  return (
-                  <Text key={index}>{comment.body} le {comment.createdAt} </Text>
-                    )
-                  })}
+                <Stack horizontal style={cls`w-full bg-gray-400 h-px`}>
 
-                { issue.ticketIssueComments.length === 0 && (
-                  <Text> Pas de commentaires .. </Text>
-                )}
-                  <Stack horizontal style={cls`w-auto flex-1 items-center justify-around`}>
-                    <Button>Annuler le ticket</Button>
-                    <Button>Editer le ticket</Button>
-                  </Stack>
                 </Stack>
+              <Link
+                classes={ { text: `text-blue-500`}}
+                  onPress={() => { navigation.navigate("detailPage", {
+                    title: issue.ticketIssueTitle,
+                    issue: issue,
+                    repository: repositoryName
+                  }) }}
+                  >
+                {repositoryName} - { issue.ticketIssueTitle }
+                </Link>
               </Card.Content>
           </Card>
           )
         })          
 
       }
-       </View>
-     </View>
+          </Stack>
+      </View>
   )
 }

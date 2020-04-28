@@ -7,6 +7,8 @@ import { classes as cls, View } from "tw";
 import Input from "./form/Input";
 import Button from "./form/Button";
 import FlashBox from "./form/FlashBox";
+import Stack from "./layout/Stack";
+import { Title } from "../components/typography"
 
 export function ProfilBase({
   classes,
@@ -102,8 +104,11 @@ export function ProfilBase({
 
   return ( 
    
-    <View style={[...cls`justify-center items-center`, ...classes.container]}>
-      <View style={cls`w-full`}>
+    <View style={[...cls`justify-center items-center w-full`, ...classes.container]}>
+
+      <Stack vertical style={cls`w-2/3`}>
+
+      {/* <View style={cls`w-full`}> */}
         {/* Ca s'affiche, mais ca marche, damn */}
         {submissionError && (
           <FlashBox.Error>
@@ -115,6 +120,8 @@ export function ProfilBase({
             Votre profil à bien été mis à jour !
           </FlashBox.Success>
         )}
+
+        <Title style={cls`text-white`}>Mon profil</Title>
         <Input
           autoFocus
           classes={classes}
@@ -191,7 +198,8 @@ export function ProfilBase({
             Modifier votre profil
           </Button>
         </View>
+      </Stack>
       </View>
-    </View>
+
   );
 }

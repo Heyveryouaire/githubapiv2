@@ -35,14 +35,12 @@ export default function ProfilPage({ navigation }) {
   
   return (
     <ScrollView
-      style={cls`flex-1 w-full h-full`}
-      contentContainerStyle={cls`m4 items-center justify-start`}
+      style={cls`flex-1 w-full h-full bg-gray-800`}
+      contentContainerStyle={cls`items-center justify-start`}
     >
-
-      <Title>Gestion de compte</Title>
       <Navbar navigation={navigation}></Navbar>
-      <View style={cls`w-1/2 bg-white`}>
-        <Stack vertical style={cls`w-full`}>
+
+        <Stack horizontal style={cls`w-2/3 m8 p8 bg-gray-700 rounded`}>
           <ProfilBase
             color={color.blue600}
             errorColor={color.red500}
@@ -52,12 +50,12 @@ export default function ProfilPage({ navigation }) {
             submissionLoading={loading}
             success={success}
             profilUser={profilUser}
+            classes={ {input: `bg-white`, label:"text-white"} }
             >
 
           </ProfilBase>
 
-        </Stack>
-      </View>
+      </Stack>
     </ScrollView>
   );
 }

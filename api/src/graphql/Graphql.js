@@ -124,11 +124,14 @@ class Graphql extends AbstractGraphql{
                       edges{
                         node{
                           title,
+                          body,
+                          id,
                           comments(last: $commentsNum){
                             edges{
                               node{
                                 body,
-                                createdAt
+                                createdAt,
+                                id
                               }
                             }
                           }

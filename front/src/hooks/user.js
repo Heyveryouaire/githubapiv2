@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import Api from "../lib/api";
 import { userApi, useUserStore } from "../stores/user";
+import { paramsApi, useParamsStore } from "../stores/params"
 
 const storedUser = userApi.getState();
 
@@ -27,6 +28,12 @@ const userActions = setUser => ({
       throw new Error("bad credentials");
     }
   },
+  logout() {
+    const resetApp = useUserStore(({ resetApp }) => resetApp);
+    resetApp();
+    setUser(null);
+  },
+
   async updateProfil({ lastname, firstname, company, email, phone}, token) { 
       const { results }  = await Api.updateProfil({
         lastname : lastname,
@@ -34,7 +41,7 @@ const userActions = setUser => ({
         company: company,
         email: email,
         phone: phone
-      }, token)// Si j'ajoutais le token ici ? y'a moyen
+      }, token)
       
     if(results){    
       delete results.token
@@ -45,13 +52,13 @@ const userActions = setUser => ({
     }
   },
 
+  // github part
   async createIssue({ label, date, project, body, fileValue}) {   
       const url = await Api.googleIt({
         name: fileValue.name,
         size: fileValue.size,
         uri: fileValue.uri,
       })
-
       let convertLink
       const regexExt = /\.[a-z]+$/i
       const found = url.results.link.match(regexExt)
@@ -82,23 +89,18 @@ const userActions = setUser => ({
     const { results }  = await Api.viewListIssue({
      repositoryName: repositoryName
     })
-    
-    console.log("les resultats vue de hooks user", results)
-  // if(results){    
-  //   userApi.setState(results)
-  //   setUser(results)
-  // } else {
-  //   throw new Error("Impossible de chercher les projets")
-  // }
   return results
 
 },
 
-  logout() {
-    const resetApp = useUserStore(({ resetApp }) => resetApp);
-    resetApp();
-    setUser(null);
-  }
+async updateIssue( { id, title, body}) {
+  const { results } = await Api.updateIssue({
+    id: id,
+    title: title,
+    body: body
+  })
+    return results.data.updateIssue
+}
   
 });
 
@@ -172,6 +174,17 @@ export function useUser() {
     }, token)
   }
 
+  const updateIssue = async ({ id, title, body}) => {
+    setLoading(true)
+    setError(null)
+    return await userContext.actions.updateIssue({
+      id,
+      title, 
+      body
+    })
+
+  }
+
   const logOut = () => {
     userContext.actions.logout();
   };
@@ -194,6 +207,7 @@ export function useUser() {
     createIssue,
     updateProfil,
     googleIt,
-    viewListIssue
+    viewListIssue,
+    updateIssue
   };
 }
