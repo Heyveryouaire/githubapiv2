@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 
 import { classes as cls, View, ScrollView } from "tw";
 import { Title } from "components/typography";
@@ -25,10 +25,10 @@ export default function DetailPage({ route, navigation }) {
   const [issueTitle, setIssueTitle] = useState("")
   const [issueBody, setIssueBody] = useState("")
   const [commentBody, setCommentBody] = useState("")
-  const [ messageComment, setMessageComment] = useState("")
+  const [messageComment, setMessageComment] = useState("")
 
   const { updateIssue, sendMessage } = useUser()
-  const currentComment = "Je suis un commentaire lambda ... "
+  const currentComment = "Je suis un commentaire ... "
 
   const setParams = useParamsStore(({ setParams }) => setParams)
   let currentParams = {}

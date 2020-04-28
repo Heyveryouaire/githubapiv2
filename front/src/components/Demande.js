@@ -1,16 +1,10 @@
 import React, { useEffect } from "react";
-import { Text } from "react-native"
-
 import { classes as cls, View } from "tw";
-
 import Card from "./Card"
 import Stack from "./layout/Stack"
-import Button from "./form/Button";
 import { Title } from "./typography"
 import FlashBox from "./form/FlashBox";
 import Link from './form/Link'
-
-
 
 export function DemandeBase({
   classes,

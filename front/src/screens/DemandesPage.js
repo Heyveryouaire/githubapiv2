@@ -1,22 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { classes as cls, View, ScrollView } from "tw";
-import { useUserStore, userApi } from "src/stores/user";
-import { Title} from "components/typography";
-
+import { classes as cls, ScrollView } from "tw";
 import Stack from "components/layout/Stack";
 import Navbar from "./parts/Nav";
 import { DemandeBase } from "/components/Demande";
 import { useUser } from "src/hooks/user"
 
 export default function DemandesPage({ navigation }) {
-  const token = useUserStore(({ token }) => token)
   const { viewListIssue } = useUser()
   const [ issues, setIssues ] = useState()
-
   let userRepos = [
     { name : "graphql2" }
   ]
-
     useEffect( () => {     
       async function putData () {
         for(let x=0; x<userRepos.length; x++){     
@@ -32,8 +26,6 @@ export default function DemandesPage({ navigation }) {
       contentContainerStyle={cls`items-center justify-start`}
     >
       <Navbar navigation={navigation}></Navbar>
-
-
         <Stack horizontal style={cls`w-2/3 m8 p8 rounded bg-gray-700`}>
 
           {issues && issues.map( (userRepo, index) => {

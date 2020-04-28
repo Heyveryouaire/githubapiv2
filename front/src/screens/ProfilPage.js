@@ -1,8 +1,6 @@
-import React, { useState, useCallback, useEffect } from "react";
-import { classes as cls, color, View, ScrollView } from "tw";
+import React, { useState, useCallback } from "react";
+import { classes as cls, color, ScrollView } from "tw";
 import { useUserStore, userApi } from "src/stores/user";
-import { Title} from "components/typography";
-
 import Stack from "components/layout/Stack";
 import Navbar from "./parts/Nav";
 import { ProfilBase } from "../components/Profil";
@@ -32,7 +30,6 @@ export default function ProfilPage({ navigation }) {
     setError(null);
   }, [setError]);
 
-  
   return (
     <ScrollView
       style={cls`flex-1 w-full h-full bg-gray-800`}
