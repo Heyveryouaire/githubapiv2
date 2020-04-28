@@ -50,9 +50,9 @@ export default function LoginPage() {
   }, [setError]);
 
   return (
-    <View style={cls`flex-1 w-full flex-col justify-center items-center`}>
+    <View style={cls`flex-1 w-full flex-col justify-center items-center bg-gray-800`}>
       <View style={cls`w64`}>
-        <Title>Connexion</Title>
+        <Title style={cls`text-white`}>Connexion</Title>
         <LoginBase
           color={color.blue600}
           errorColor={color.red500}
@@ -60,6 +60,8 @@ export default function LoginPage() {
           submissionError={error}
           clearSubmissionError={clearError}
           submissionLoading={loading}
+          classes={{ label:"text-white", input:"bg-white"}}
+
         />
       </View>
     </View>

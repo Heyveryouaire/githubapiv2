@@ -31,9 +31,9 @@ export default function SignupPage() {
 
 
   return (
-    <View style={cls`flex-1 w-full flex-col justify-center items-center`}>
+    <View style={cls`flex-1 w-full flex-col justify-center items-center bg-gray-800`}>
       <View style={cls`w64`}>
-        <Title>Créez votre compte</Title>
+        <Title style={cls`text-white`}>Créez votre compte</Title>
         <SignUpBase
           color={color.blue600}
           errorColor={color.red500}
@@ -41,6 +41,7 @@ export default function SignupPage() {
           submissionError={error}
           clearSubmissionError={clearError}
           submissionLoading={loading}
+          classes={{ label:"text-white", input:"bg-white"}}
         />
       </View>
     </View>

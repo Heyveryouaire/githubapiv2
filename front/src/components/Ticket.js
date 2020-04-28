@@ -142,6 +142,8 @@ export function TicketBase({
           <Radio.Button value="graphql2" label="Graphql2"></Radio.Button>
           <Radio.Button value="boum" label="Boum"></Radio.Button>     
         </Radio.Group>
+        <Stack horizontal style={cls`m4`} ></Stack>
+
         <Input
           autoFocus
           classes={classes}
@@ -183,8 +185,9 @@ export function TicketBase({
           // onSubmitEditing={submit}
           error={errors && errors.body && errors.body.message}
         />
+        <Stack horizontal style={cls`m4`} ></Stack>
 
-        <Stack horizontal style={cls`w-1/6 text-center py-4 my-4`}
+        <Stack horizontal style={cls`w-1/6 text-center py-4`}
         >
           <Button
             value={fileValue}
@@ -196,6 +199,7 @@ export function TicketBase({
           >
             Choisir un fichier
         </Button>
+        <Stack horizontal style={cls`m8`} ></Stack>
         </Stack>
 
           <Stack horizontal style={cls`py-4 my-4 text-center justify-center`}>

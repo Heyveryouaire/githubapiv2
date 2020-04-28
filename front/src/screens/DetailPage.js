@@ -195,11 +195,12 @@ export default function DetailPage({ route, navigation }) {
                 </Stack>
 
                 {/* Add comment */}
-                <Stack horizontal style={cls`flex w-full`}>
-
-                  <Stack vertical style={cls`w-2/3`}>
+         
+                  <Stack horizontal style={cls`flex items-center`}>
+                    <Stack horizontal style={cls`flex-2 w-10/12`}>
                     <Input
-                      classes={{ input: `bg-white` }}
+                      classes={{ input: `bg-white`, label: `text-white` }}
+                      label="Ajouter un commentaire"
                       placeholder={"Ajouter un nouveau commentaire"}
                       value={messageComment}
                       onValueChange={(value) => {
@@ -208,18 +209,17 @@ export default function DetailPage({ route, navigation }) {
                         }}
                     >
                     </Input>
-                  </Stack>
-                  <Stack vertical style={cls`w-1/3`}>
+                      </Stack>
+                    <Stack horizontal style={cls`flex-1 justify-center items-center`}>
                     <Button
-                      style={cls`flex-1`}
                       color={"green-500"}
                       onPress={() => { 
                         sendComment(messageComment)}
                       }
                     >Envoyer
                     </Button>
-                  </Stack>
-                </Stack>
+                      </Stack>
+                  </Stack>              
               </Card.Content>
 
             </Card>

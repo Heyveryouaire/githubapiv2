@@ -3,46 +3,47 @@ import React from "react";
 import { classes as cls} from "tw";
 
 import Stack from "components/layout/Stack";
-
-import Button from "components/form/Button"
+import { View, Text} from "react-native"
 import LogoutButton from "components/LogoutButton"
 import Link from "../../components/form/Link";
 
 export default function Navbar({ navigation }) {
 
+  const links = [
+    { 
+      uri: "profilPage",
+      message : "Mon compte"
+    },
+    {
+      uri: "demandesPage",
+      message: "Mes demandes"
+    },
+    {
+      uri: "ticketPage",
+      message: "Envoyer un ticket"
+    }
+  ]
+
   return (
-    // page home is a model
-      <Stack horizontal style={cls`w-full flex-1 items-center justify-start bg-gray-700`}>
-        {/* <Button onPress={() => navigation.navigate("home")}>
-            Accueil
-        </Button> */}
-        <Stack horizontal style={cls`w-1/3 flex justify-around items-center`}>
-
-        <Link 
-        onPress={() => navigation.navigate("profilPage")}
-        classes={{ text: `text-white`}}
-        >
-        Mon compte
-        </Link>
-
-        <Link 
-        classes={{ text: `text-white`}}
-        onPress={() => navigation.navigate("demandesPage")}
-        >
-          Mes demandes
-        </Link>
-
-        <Link 
-        onPress={() => navigation.navigate("ticketPage")}
-        classes={{ text: `text-white`}}
-
-        >
-          Envoyer un ticket
-        </Link>
-
-        <LogoutButton />
-        </Stack>
-
+      <Stack horizontal style={cls`w-full items-center justify-start bg-gray-700`}>
+        {links.map((link, index) => {
+          return (
+            <View style={cls`m-x4`} key={index}>
+              <Text style={cls`text-lg`}>
+                <Link 
+                onPress={() => navigation.navigate(link.uri)}
+                classes={{ text: `text-white`}}
+                >{ link.message}
+                </Link>
+              </Text>
+            </View>
+            )
+        }) }
+         <View style={cls`m-x4`}>
+              <Text style={cls`text-sm`}>
+                <LogoutButton />
+              </Text>
+        </View>
       </Stack>
-  );
+  )
 }
