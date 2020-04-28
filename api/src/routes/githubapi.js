@@ -39,10 +39,12 @@ module.exports = (context, _middlewares) => {
   })
 
   // it'll be better with frontend to query id
-  router.get("/commentIssue", (req, res) => {
+  router.post("/commentIssue", (req, res) => {
+    console.log(" mon id", req.body.subjectId)
+    console.log("mon message", req.body.message)
     graph.mutationCommentIssue({
-      subjectId: "MDU6SXNzdWU1OTM0NDQ0NDI=",
-      body: "i'm the bodyyy"
+      subjectId: req.body.subjectId,
+      body: req.body.message
     }).then(rep => {
       res.send(rep)
     })
@@ -93,7 +95,7 @@ module.exports = (context, _middlewares) => {
       login: process.env.GITHUB_USERNAME,
       repositoryName: req.body.repositoryName,
       issueNum: 4,
-      commentsNum: 2
+      commentsNum: 10
     }).then( rep => {
       const ticket = []
       let repositories = rep.data.user.repository.issues.edges

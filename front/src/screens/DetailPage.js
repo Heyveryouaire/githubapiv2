@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 import { classes as cls, View, ScrollView } from "tw";
 import { Title } from "components/typography";
@@ -12,18 +12,22 @@ import IconButton from "../components/form/IconButton"
 import Input from "../components/form/Input"
 import { useParamsStore } from "../stores/params"
 import { useUser } from "src/hooks/user"
+import FlashBox from "../components/form/FlashBox"
 
 export default function DetailPage({ route, navigation }) {
 
   const [editionIssue, setEditionIssue] = useState(false)
   const [editionComment, setEditComment] = useState(false)
+  const [ error, setError] = useState(null)
+  const [ success, setSuccess] = useState(false)
 
   const [issueId, setissueId] = useState("")
   const [issueTitle, setIssueTitle] = useState("")
   const [issueBody, setIssueBody] = useState("")
   const [commentBody, setCommentBody] = useState("")
+  const [ messageComment, setMessageComment] = useState("")
 
-  const { updateIssue } = useUser()
+  const { updateIssue, sendMessage } = useUser()
   const currentComment = "Je suis un commentaire lambda ... "
 
   const setParams = useParamsStore(({ setParams }) => setParams)
@@ -49,6 +53,29 @@ export default function DetailPage({ route, navigation }) {
     console.log("retour de lupdate", test.issue)
   }
 
+  const sendComment = async () => {
+    if(messageComment !== ""){
+      try{
+        let test = await sendMessage({ subjectId: issueId, message: messageComment})
+        setMessageComment("")
+        setSuccess(true)
+
+      }catch(err){
+        console.log("Impossible d'ajouter un commentaire")
+        setError(err)
+      }
+      // Maintenant faut faire remonter l'état .. 
+    }else{
+      console.log("Aucun message n'a été défini")
+      // Throw something 
+    }
+  }
+
+  const clearError = () => {
+    setError(null)
+    setSuccess(null)
+  }
+
   return (
     <ScrollView
       style={cls`flex-1 w-full h-full bg-gray-800`}
@@ -56,10 +83,24 @@ export default function DetailPage({ route, navigation }) {
     >
       <Navbar navigation={navigation}></Navbar>
 
-      <Stack horizontal style={cls`w-2/3 m8 p8 rounded bg-gray-700`}>
+      <Stack vertical style={cls`w-2/3 m8 p8 rounded bg-gray-700`}>
 
-        <Stack vertical style={cls`w-full`}>
+      <Stack horizontal style={cls`w-full justify-center`}>
+
+        {error && (
+          <FlashBox.Error>
+            Impossible d'envoyer votre commentaire
+          </FlashBox.Error>
+        )}
+        {success && (
+          <FlashBox.Success>
+            Votre commentaire à bien été envoyé
+          </FlashBox.Success>
+        )}
+
+        </Stack>
           <Title style={cls`text-white`}>Détails d'un ticket</Title>
+        <Stack horizontal style={cls`w-full`}>
           <View style={cls`flex justify-center items-center w-full`}>
 
             {/* <View style={cls`flex justify-center items-center xl:w-1/2 lg:w-1/2 md:w-1/2 sm:w-full`}> */}
@@ -137,11 +178,15 @@ export default function DetailPage({ route, navigation }) {
                             {comment.body}
                           </Text>
                         }
-                        <IconButton
+                        {/* We can't edit a comment for now */}
+
+                        {/* <IconButton
                           icon="md-create"
                           style={cls`flex-1`}
-                          onPress={() => { setEditComment(!editionComment) }}
-                        ></IconButton>
+                          onPress={() => { 
+                            setEditComment(!editionComment)
+                          }}
+                        ></IconButton> */}
 
                       </Stack>
                     )
@@ -156,6 +201,11 @@ export default function DetailPage({ route, navigation }) {
                     <Input
                       classes={{ input: `bg-white` }}
                       placeholder={"Ajouter un nouveau commentaire"}
+                      value={messageComment}
+                      onValueChange={(value) => {
+                        clearError()
+                         setMessageComment(value)
+                        }}
                     >
                     </Input>
                   </Stack>
@@ -163,7 +213,9 @@ export default function DetailPage({ route, navigation }) {
                     <Button
                       style={cls`flex-1`}
                       color={"green-500"}
-                      onPress={() => null}
+                      onPress={() => { 
+                        sendComment(messageComment)}
+                      }
                     >Envoyer
                     </Button>
                   </Stack>

@@ -140,7 +140,7 @@ export function TicketBase({
           error={errors && errors.project && errors.project.message}
         >
           <Radio.Button value="graphql2" label="Graphql2"></Radio.Button>
-          <Radio.Button value="boum" label="Boum"></Radio.Button>
+          <Radio.Button value="boum" label="Boum"></Radio.Button>     
         </Radio.Group>
         <Input
           autoFocus

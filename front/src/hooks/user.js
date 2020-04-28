@@ -100,6 +100,14 @@ async updateIssue( { id, title, body}) {
     body: body
   })
     return results.data.updateIssue
+},
+
+async sendMessage({ subjectId, message}) {
+  console.log("etat dans useUser, ", subjectId, message)
+  const { results } = await Api.sendMessage({
+    subjectId,
+    message
+  })
 }
   
 });
@@ -182,7 +190,15 @@ export function useUser() {
       title, 
       body
     })
+  }
 
+  const sendMessage = async ({ subjectId, message}) => {
+    setLoading(true)
+    setError(null)
+    return await userContext.actions.sendMessage({
+      subjectId,
+      message
+    })
   }
 
   const logOut = () => {
@@ -208,6 +224,7 @@ export function useUser() {
     updateProfil,
     googleIt,
     viewListIssue,
-    updateIssue
+    updateIssue,
+    sendMessage
   };
 }

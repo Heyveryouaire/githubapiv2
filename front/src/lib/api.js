@@ -186,5 +186,10 @@ export default {
     return post(`${ROUTES.GITHUBAPI}/updateIssue`, {
       body: params
     })
+  },
+  sendMessage: (params) => {
+    return post(`${ROUTES.GITHUBAPI}/commentIssue`, {
+      body: params
+    })
   }
 };
