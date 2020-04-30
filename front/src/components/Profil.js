@@ -60,8 +60,8 @@ export function ProfilBase({
 
   // Here we add the post
   useEffect(() => {
-    register("lastname", {required: "Champ obligatoire", minLength: { value: 2, message : "Le champ est trop court"}});
-    register("firstname", {required: "Champ obligatoire", minLength: { value: 2, message : "Le champ est trop court"}});
+    register("lastname", {required: "Champ obligatoire", minLength: { value: 2, message : "Le champ est trop court"} , pattern:{ value: /^[a-zA-Z]{2,50}$/, message: "Le champ n'est pas valide"}});
+    register("firstname", {required: "Champ obligatoire", minLength: { value: 2, message : "Le champ est trop court"} , pattern:{ value: /^[a-zA-Z]{2,50}$/, message: "Le champ n'est pas valide"}});
     register("email", {required: "Champ obligatoire", minLength: { value: 8, message : "Le champ est trop court"}, pattern:{ value: /^([a-z0-9]{1,}.?_?){3,}[a-z0-9]{1,}@[a-z]{2,6}.[a-z]{2,6}$/, message: "Le format n'est pas valide"}})
     register("company", {required: "Champ obligatoire", minLength: { value: 2, message : "Le champ est trop court"}})
     register("phone",{ required: "Champ obligatoire", minLength: { value: 10, message : "Le champ est trop court"}, pattern : {value: /^([0-9]{2}){5}$/, message: "Le format n'est pas valide"}})
@@ -148,7 +148,7 @@ export function ProfilBase({
             setValue("firstname", value);
           }}
           onSubmitEditing={submit}
-          error={errors && errors.prenom && errors.prenom.message}
+          error={errors && errors.firstname && errors.firstname.message}
         />
         <Input
           classes={classes}

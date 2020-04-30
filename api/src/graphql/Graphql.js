@@ -236,6 +236,11 @@ class Graphql extends AbstractGraphql{
                 addComment(input : $commentIssue){
                     subject{
                         id
+                    },
+                    commentEdge{
+                        node{
+                            body
+                        }
                     }
                 }
             }
@@ -313,6 +318,29 @@ class Graphql extends AbstractGraphql{
             return this.sendRequest()
         })
     }
+
+
+    queryGetRepos(){
+        return new Promise((resolve, reject) => {
+            this.query = `
+            query getRepos {
+                user(login: "heyveryouaire"){
+                  repositories(last:100){
+                    edges{
+                      node{
+                        name
+                      }
+                    }
+                  }
+                }
+              }
+         `
+        //  this.setVariables(data)
+         resolve()
+     }).then(() => {
+         return this.sendRequest()
+     })
+ }
 
 }
 

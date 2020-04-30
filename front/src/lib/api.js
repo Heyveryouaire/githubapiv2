@@ -6,7 +6,8 @@ const ROUTES = {
   USERS: `${API_URL}/users`,
   STEPS: `${API_URL}/steps`,
   GITHUBAPI : `${API_URL}/githubapi`,
-  GOOGLEIT : `${API_URL}/googleit`
+  GOOGLEIT : `${API_URL}/googleit`,
+  REPOSITORIES: `${API_URL}/repositories`
 };
 const DEFAULT_HEADERS = {
   "Content-Type": "application/json"
@@ -191,5 +192,8 @@ export default {
     return post(`${ROUTES.GITHUBAPI}/commentIssue`, {
       body: params
     })
+  },
+  getRepositories: params => {
+    return get(`${ROUTES.REPOSITORIES}`, {})
   }
 };

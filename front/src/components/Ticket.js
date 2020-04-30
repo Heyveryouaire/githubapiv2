@@ -11,6 +11,7 @@ import FlashBox from "./form/FlashBox";
 import Radio from "./form/Radio"
 import Stack from "./layout/Stack"
 import { Title } from "../components/typography"
+import Api from "../lib/api"
 
 export function TicketBase({
   classes,
@@ -18,7 +19,7 @@ export function TicketBase({
   submissionError,
   clearSubmissionError,
   submissionLoading,
-  success
+  success,
 }) {
   classes = classes || {};
   classes.container = classes.container || [];
@@ -60,6 +61,21 @@ export function TicketBase({
     },
     [handleSubmit]
   );
+
+  const [ repo, setRepos ] = useState(null)
+  useEffect(() => {
+    console.log('effect loaded')
+    async function repoSet() {
+      setRepos(await getRepos())
+    }
+    repoSet()
+  }, [])
+
+  const getRepos = async () => {
+    console.log("launched")
+    return await Api.getRepositories()
+  }
+
 
   // Here we add the post data
   useEffect(() => {
@@ -114,6 +130,7 @@ export function TicketBase({
     return () => navigation.removeListener("blur", listener);
   }, [navigation]);
   // console.log(submissionError)
+
   return (
     <View style={[...cls`justify-center items-center`, ...classes.container]}>
       <Stack vertical style={cls`w-2/3`}>
@@ -128,20 +145,29 @@ export function TicketBase({
           </FlashBox.Success>
         )}
         <Title style={cls`text-white`}>Créer un ticket</Title>
-        <Radio.Group
-          value={projectValue}
-          onValueChange={value => {
-            clearError();
-            clearSubmissionError();
-            setValue("project", value);
-          }}
+        <Stack vertical style={cls`flex w-full justify-center items-center`}>
 
-          // onSubmitEditing={submit}
-          error={errors && errors.project && errors.project.message}
-        >
-          <Radio.Button value="graphql2" label="Graphql2"></Radio.Button>
-          <Radio.Button value="boum" label="Boum"></Radio.Button>     
-        </Radio.Group>
+          { repo && (
+              <Radio.Group
+              value={projectValue}
+              onValueChange={value => {
+                clearError();
+                clearSubmissionError();
+                setValue("project", value);
+              }}
+              // onSubmitEditing={submit}
+              error={errors && errors.project && errors.project.message}
+              style={cls`flex`}
+              >     
+              { repo.results.map((repo, index) => {
+                return (
+                  <Radio.Button key={index} value={repo.name} label={repo.name}></Radio.Button>
+                  )
+                })}
+              </Radio.Group>
+          )}      
+          </Stack>
+
         <Stack horizontal style={cls`m4`} ></Stack>
 
         <Input

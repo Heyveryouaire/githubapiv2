@@ -103,11 +103,16 @@ async updateIssue( { id, title, body}) {
 },
 
 async sendMessage({ subjectId, message}) {
-  console.log("etat dans useUser, ", subjectId, message)
   const { results } = await Api.sendMessage({
     subjectId,
     message
   })
+  let res =  {
+    id : results.data.addComment.subject.id,
+    body: results.data.addComment.commentEdge.node.body
+  }
+
+  return res
 }
   
 });

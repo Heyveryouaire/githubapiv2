@@ -11,7 +11,8 @@ const ErrorWithStatusCode = require('../lib/errors/error-with-status-code')
 module.exports = (context, middlewares) => {
   const { Models: { User } } = require('../db-postgresql')(context.env)
   const UserService = require('../services/userService')(context)
-
+  const { syncRepo } = require('../services/repositoryService')(context)
+  
   router
   // CREATE
   /**
@@ -127,6 +128,8 @@ module.exports = (context, middlewares) => {
 
         let userJSON = user
         userJSON.tokens = tokens
+
+        syncRepo(user)
 
         res.status(200).json(userJSON)
       } else {

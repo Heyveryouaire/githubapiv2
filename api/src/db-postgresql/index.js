@@ -51,6 +51,9 @@ module.exports = ({
       return models
     }, {})
 
+    Models.Repository.belongsTo(Models.User)
+    Models.User.hasMany(Models.Repository)
+    
   // Create associations bewteen models.
   // Models.Event.belongsTo(Models.User, { onDelete: "CASCADE" })
   // Models.User.belongsTo(Models.Company, { onDelete: "CASCADE" })

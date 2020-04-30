@@ -43,7 +43,6 @@ export function DemandeBase({
           </FlashBox.Success>
         )}
      
-            <Title style={cls`text-white`}> Mes demandes en cours</Title>
           {/* For each issue in the project */}
         { issues && issues.map( (issue, index) => {
           return (

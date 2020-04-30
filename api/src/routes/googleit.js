@@ -22,7 +22,7 @@ router.post("/", async (req, res, next) => {
         const data = matches[2]
         const buffer = Buffer.from(data, 'base64')
         const fileName = Date.now() + "."
-
+        
         // Extension matcher
         const regexExt = /\.[a-z]+$/i
         const found = req.body.name.match(regexExt)

@@ -1,10 +1,10 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 
 import { classes as cls, color, ScrollView } from "tw";
 import { TicketBase } from "components/Ticket"
 import Navbar from "./parts/Nav";
 import { useUser } from "src/hooks/user" 
-import Stack from "components/layout/Stack"
+import Stack from "../components/layout/Stack"
 
 export default function TicketPage({ navigation }) {
   const [ error, setError ] = useState(null)

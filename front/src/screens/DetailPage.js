@@ -51,6 +51,7 @@ export default function DetailPage({ route, navigation }) {
   const submit = async () => {
     let test = await updateIssue({ id: issueId, title: issueTitle, body: issueBody })
     console.log("retour de lupdate", test.issue)
+    setIssueTitle(issueTitle)
   }
 
   const sendComment = async () => {
@@ -59,6 +60,7 @@ export default function DetailPage({ route, navigation }) {
         let test = await sendMessage({ subjectId: issueId, message: messageComment})
         setMessageComment("")
         setSuccess(true)
+        console.log("resultat de la requete dans detailpage ",test)
 
       }catch(err){
         console.log("Impossible d'ajouter un commentaire")
@@ -82,11 +84,8 @@ export default function DetailPage({ route, navigation }) {
       contentContainerStyle={cls`items-center justify-start`}
     >
       <Navbar navigation={navigation}></Navbar>
-
       <Stack vertical style={cls`w-2/3 m8 p8 rounded bg-gray-700`}>
-
       <Stack horizontal style={cls`w-full justify-center`}>
-
         {error && (
           <FlashBox.Error>
             Impossible d'envoyer votre commentaire
@@ -97,16 +96,12 @@ export default function DetailPage({ route, navigation }) {
             Votre commentaire à bien été envoyé
           </FlashBox.Success>
         )}
-
         </Stack>
           <Title style={cls`text-white`}>Détails d'un ticket</Title>
         <Stack horizontal style={cls`w-full`}>
           <View style={cls`flex justify-center items-center w-full`}>
-
             {/* <View style={cls`flex justify-center items-center xl:w-1/2 lg:w-1/2 md:w-1/2 sm:w-full`}> */}
-
             <Card direction="" style={cls`bg-gray-700 border-gray-800 flex-1 justify-center w-full`}>
-
               {/* Header */}
               <Card.Title>
                 <Stack horizontal style={cls`flex w-full h-auto  items-center justify-around`}>
@@ -221,7 +216,6 @@ export default function DetailPage({ route, navigation }) {
                       </Stack>
                   </Stack>              
               </Card.Content>
-
             </Card>
           </View>
         </Stack>
