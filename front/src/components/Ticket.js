@@ -29,31 +29,20 @@ export function TicketBase({
   classes.helper = classes.helper || [];
   classes.forgottenText = classes.forgottenText || [];
 
-  // const usernameRef = useRef(null);
-  const passwordRef = useRef(null);
-  const [radio, setRadio] = useState(null)
-  // const fgtPasswd = useRef(null);
-
   const {
     register,
     handleSubmit,
     setValue,
-    getValues,
     errors,
-    clearError
+    clearError,
+    watch
   } = useForm();
-  const {
-    label: labelValue,
-    date: dateValue,
-    project: projectValue,
-    body: bodyValue,
-    file: fileValue
-    // radio: radioValue
-  } = getValues();
 
-  // const onLabelSubmit = useCallback(() => {
-  //   passwordRef.current.focus();
-  // }, [passwordRef.current]);
+  const labelValue = watch("label")
+  const dateValue = watch("date")
+  const projectValue = watch("project")
+  const bodyValue = watch("body")
+  const fileValue = watch("file")
 
   const onPasswordSubmit = useCallback(
     data => {
@@ -75,7 +64,6 @@ export function TicketBase({
     console.log("launched")
     return await Api.getRepositories()
   }
-
 
   // Here we add the post data
   useEffect(() => {

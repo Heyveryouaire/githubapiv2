@@ -10,7 +10,6 @@ export function DemandeBase({
   classes,
   submissionError,
   success,
-  repositoryName,
   issues,
   navigation
 
@@ -26,7 +25,6 @@ export function DemandeBase({
   useEffect(() => {
     issues = issues
   }, [])
-
 
   return ( 
    
@@ -48,7 +46,7 @@ export function DemandeBase({
           return (
             <Card direction="vertical" key={index} style={cls`bg-gray-700 border-gray-800`}>
               <Card.Title style={cls`text-white`}>
-                { repositoryName }
+                { issue.issueName }
                 </Card.Title>  
               <Card.Content>
                 <Stack horizontal style={cls`w-full bg-gray-400 h-px`}>
@@ -59,10 +57,10 @@ export function DemandeBase({
                   onPress={() => { navigation.navigate("detailPage", {
                     title: issue.ticketIssueTitle,
                     issue: issue,
-                    repository: repositoryName
+                    repository: issue.issueName
                   }) }}
                   >
-                {repositoryName} - { issue.ticketIssueTitle }
+                { issue.ticketIssueTitle }
                 </Link>
               </Card.Content>
           </Card>

@@ -11,6 +11,7 @@ const userActions = setUser => ({
    
     if (results && results.tokens) {
       userApi.setState(results);
+      userApi.getState().setToken(results.tokens.token)
       setUser(results);
     } else {
       throw new Error("bad credentials");

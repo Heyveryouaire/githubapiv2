@@ -100,31 +100,27 @@ function RadioButton({
 
 function RadioGroup({ value, onValueChange, children }) {
   let [currentValue, setCurrentValue] = useState(value);
-
   useEffect(() => {
     if (currentValue !== value) {
       setCurrentValue(value);
     }
   }, [currentValue, value, setCurrentValue]);
-
   return (
     <View>
-      {children.map((Child, idx) => {
-        return (
-          <Child.type
-            {...Child.props}
-            key={`${value}_${idx}`}
-            checked={Child.props.value === currentValue}
-            onCheckChange={() => {
-              setCurrentValue(Child.props.value);
-              onValueChange && onValueChange(Child.props.value);
-            }}
-          />
-        );
-      })}
+      {
+        children.map((child, index) => React.cloneElement(child,
+        {
+          checked: child.props.value === currentValue,
+          onCheckChange: () => {
+            setCurrentValue(child.props.value);
+            onValueChange && onValueChange(child.props.value)
+          }
+        }))
+      }
     </View>
   );
 }
+
 
 export default {
   Button: RadioButton,

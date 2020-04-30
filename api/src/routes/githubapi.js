@@ -97,8 +97,11 @@ module.exports = (context, _middlewares) => {
       issueNum: 4,
       commentsNum: 10
     }).then( rep => {
+      // Looking for all issues in the repo
       const ticket = []
       let repositories = rep.data.user.repository.issues.edges
+      if(repositories.length > 0){
+      
       repositories.forEach(repository => {
         // if(repository.node.comments.edges.length >= 1){ // If there's one comment on the issue
           let ticketIssueTitle = repository.node.title
@@ -115,12 +118,19 @@ module.exports = (context, _middlewares) => {
               })
             } 
           }
-          ticket.push({ ticketIssueId, ticketIssueTitle, ticketIssueBody,  ticketIssueComments})         
-      });
+          let issueName = rep.data.user.repository.name
+          ticket.push({ issueName, ticketIssueId, ticketIssueTitle, ticketIssueBody, ticketIssueComments})   
+        });
+      }else{
+        // let issueName = rep.data.user.repository.name
+        // ticket.push({ issueName })
+      }  
       res.status(200).json(ticket)
     })
     .catch(err => {
-      res.status(404).send("Projet non trouvé")
+      console.log("erreur dans le trouvage du repo :", err)
+      // res.status(404).send("Projet non trouvé")
+      res.status(200).json({null: true})
     }) 
 
   })

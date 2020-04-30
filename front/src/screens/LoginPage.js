@@ -21,7 +21,7 @@ export default function LoginPage() {
       setLoading(true);
       try {
         await logIn(credentials);        
-        setToken(getUserToken());
+        // setToken(getUserToken());
       } catch (err) {
         setError(err);
         setLoading(false);
