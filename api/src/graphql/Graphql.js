@@ -322,9 +322,10 @@ class Graphql extends AbstractGraphql{
 
     queryGetRepos(){
         return new Promise((resolve, reject) => {
+            let data = { name : process.env.GITHUB_USERNAME}
             this.query = `
-            query getRepos {
-                user(login: "heyveryouaire"){
+            query getRepos ($name: String!){
+                user(login: $name){
                   repositories(last:100){
                     edges{
                       node{
@@ -335,7 +336,7 @@ class Graphql extends AbstractGraphql{
                 }
               }
          `
-        //  this.setVariables(data)
+         this.setVariables(data)
          resolve()
      }).then(() => {
          return this.sendRequest()

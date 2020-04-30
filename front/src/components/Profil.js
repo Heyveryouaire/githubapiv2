@@ -106,7 +106,7 @@ export function ProfilBase({
    
     <View style={[...cls`justify-center items-center w-full`, ...classes.container]}>
 
-      <Stack vertical style={cls`w-2/3`}>
+      <Stack vertical style={cls`w-full sm:w-full md:w-full lg:w-2/3 xl:w-2/3`}>
 
       {/* <View style={cls`w-full`}> */}
         {/* Ca s'affiche, mais ca marche, damn */}
@@ -121,7 +121,7 @@ export function ProfilBase({
           </FlashBox.Success>
         )}
 
-        <Title style={cls`text-white`}>Mon profil</Title>
+        <Title style={cls`text-center sm:text-center md:text-center lg:text-left xl:text-left text-white`}>Mon profil</Title>
         <Input
           autoFocus
           classes={classes}

@@ -25,11 +25,11 @@ export default function Navbar({ navigation }) {
   ]
 
   return (
-      <Stack horizontal style={cls`w-full items-center justify-start bg-gray-700`}>
+      <View style={cls`flex-row flex-wrap w-full items-center justify-around sm:justify-around md:justify-around lg-justify-start xl:justify-start bg-gray-700`}>
         {links.map((link, index) => {
           return (
             <View style={cls`m-x4`} key={index}>
-              <Text style={cls`text-lg`}>
+              <Text style={cls`text-base sm:text-base md:text-base lg:text-lg xl:text-lg`}>
                 <Link 
                 onPress={() => navigation.navigate(link.uri)}
                 classes={{ text: `text-white`}}
@@ -44,6 +44,6 @@ export default function Navbar({ navigation }) {
                 <LogoutButton />
               </Text>
         </View>
-      </Stack>
+      </View>
   )
 }

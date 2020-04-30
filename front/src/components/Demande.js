@@ -22,9 +22,9 @@ export function DemandeBase({
   classes.helper = classes.helper || [];
   classes.forgottenText = classes.forgottenText || [];
 
-  useEffect(() => {
-    issues = issues
-  }, [])
+  // useEffect(() => {
+  //   issues = issues
+  // }, [])
 
   return ( 
    

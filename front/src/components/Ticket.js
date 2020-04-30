@@ -80,9 +80,6 @@ export function TicketBase({
       required: "Une description est requise"
     })
     register("fileValue", {})
-    // register("radio", {
-    //   required : "Il faut un projet"
-    // })
   }, [register]);
 
   const submit = useMemo(() => handleSubmit(onPasswordSubmit), [
@@ -121,7 +118,7 @@ export function TicketBase({
 
   return (
     <View style={[...cls`justify-center items-center`, ...classes.container]}>
-      <Stack vertical style={cls`w-2/3`}>
+      <Stack vertical style={cls`w-full sm:w-full md:w-full lg:w-2/3 xl:w-2/3`}>
         {submissionError && (
           <FlashBox.Error>
             Impossible d'envoyer votre ticket
@@ -132,8 +129,8 @@ export function TicketBase({
             Votre ticket à bien été transmis !
           </FlashBox.Success>
         )}
-        <Title style={cls`text-white`}>Créer un ticket</Title>
-        <Stack vertical style={cls`flex w-full justify-center items-center`}>
+        <Title style={cls`text-center sm:text-center md:text-center lg:text-left xl:text-left text-white`}>Créer un ticket</Title>
+
 
           { repo && (
               <Radio.Group
@@ -153,8 +150,7 @@ export function TicketBase({
                   )
                 })}
               </Radio.Group>
-          )}      
-          </Stack>
+          )} 
 
         <Stack horizontal style={cls`m4`} ></Stack>
 
@@ -215,6 +211,7 @@ export function TicketBase({
         </Button>
         <Stack horizontal style={cls`m8`} ></Stack>
         </Stack>
+        <Stack horizontal style={cls`m4`} ></Stack>
 
           <Stack horizontal style={cls`py-4 my-4 text-center justify-center`}>
 

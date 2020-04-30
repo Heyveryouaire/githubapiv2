@@ -84,7 +84,7 @@ export default function DetailPage({ route, navigation }) {
       contentContainerStyle={cls`items-center justify-start`}
     >
       <Navbar navigation={navigation}></Navbar>
-      <Stack vertical style={cls`w-2/3 m8 p8 rounded bg-gray-700`}>
+      <Stack vertical style={cls` w-full sm:w-full md:w-full lg:w-2/3 xl:w-2/3 m8 p8 bg-gray-700 rounded`}>
       <Stack horizontal style={cls`w-full justify-center`}>
         {error && (
           <FlashBox.Error>
@@ -97,14 +97,14 @@ export default function DetailPage({ route, navigation }) {
           </FlashBox.Success>
         )}
         </Stack>
-          <Title style={cls`text-white`}>Détails d'un ticket</Title>
+          <Title style={cls`text-center sm:text-center md:text-center lg:text-left xl:text-left text-white`}>Détails d'un ticket</Title>
         <Stack horizontal style={cls`w-full`}>
           <View style={cls`flex justify-center items-center w-full`}>
             {/* <View style={cls`flex justify-center items-center xl:w-1/2 lg:w-1/2 md:w-1/2 sm:w-full`}> */}
             <Card direction="" style={cls`bg-gray-700 border-gray-800 flex-1 justify-center w-full`}>
               {/* Header */}
               <Card.Title>
-                <Stack horizontal style={cls`flex w-full h-auto  items-center justify-around`}>
+                <Stack horizontal style={cls`flex-wrap w-full h-auto items-center justify-around`}>
                   {editionIssue ?
                     <Stack horizontal style={cls`flex-1`}>
                       <Input
@@ -173,16 +173,7 @@ export default function DetailPage({ route, navigation }) {
                             {comment.body}
                           </Text>
                         }
-                        {/* We can't edit a comment for now */}
-
-                        {/* <IconButton
-                          icon="md-create"
-                          style={cls`flex-1`}
-                          onPress={() => { 
-                            setEditComment(!editionComment)
-                          }}
-                        ></IconButton> */}
-
+                      
                       </Stack>
                     )
                   })}
@@ -191,7 +182,7 @@ export default function DetailPage({ route, navigation }) {
 
                 {/* Add comment */}
          
-                  <Stack horizontal style={cls`flex items-center`}>
+                  <Stack vertical style={cls`flex items-center`}>
                     <Stack horizontal style={cls`flex-2 w-10/12`}>
                     <Input
                       classes={{ input: `bg-white`, label: `text-white` }}

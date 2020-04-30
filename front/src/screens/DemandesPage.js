@@ -23,7 +23,7 @@ export default function DemandesPage({ navigation }) {
       let repositories = await Api.getRepositories()
       console.log("voici les repo de l'user", repositories)
       let tempIssues = []
-      for (let x = 0; x < 10; x++) {
+      for (let x = 0; x < repositories.results.length ; x++) {
         // on charge les issues
         let repositoriesIssues = await viewListIssue({ repositoryName: repositories.results[x].name })
         if (repositoriesIssues.length > 0) {
@@ -43,9 +43,9 @@ export default function DemandesPage({ navigation }) {
       contentContainerStyle={cls`items-center justify-start`}
     >
       <Navbar navigation={navigation}></Navbar>
-      <Stack horizontal style={cls`w-2/3 m8 p8 rounded bg-gray-700`}>
+      <Stack horizontal style={cls` w-full sm:w-full md:w-full lg:w-2/3 xl:w-2/3 m8 p8 bg-gray-700 rounded`}>
         <Stack horizontal style={cls`flex-wrap w-full`}>
-          <Title style={cls`text-white`}> Mes demandes en cours</Title>
+          <Title style={cls`text-center sm:text-center md:text-center lg:text-left xl:text-left text-white`}> Mes demandes en cours</Title>
 
           {issues && (
                 <DemandeBase

@@ -37,7 +37,7 @@ export default function ProfilPage({ navigation }) {
     >
       <Navbar navigation={navigation}></Navbar>
 
-        <Stack horizontal style={cls`w-2/3 m8 p8 bg-gray-700 rounded`}>
+        <Stack horizontal style={cls` w-full sm:w-full md:w-full lg:w-2/3 xl:w-2/3 m8 p8 bg-gray-700 rounded`}>
           <ProfilBase
             color={color.blue600}
             errorColor={color.red500}

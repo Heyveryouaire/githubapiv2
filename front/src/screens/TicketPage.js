@@ -39,7 +39,7 @@ const clearError = useCallback(() => {
     >
       <Navbar navigation={navigation}></Navbar>
       
-      <Stack vertical style={cls`w-2/3 m8 p8 bg-gray-700 rounded`}>
+      <Stack vertical style={cls` w-full sm:w-full md:w-full lg:w-2/3 xl:w-2/3 m8 p8 bg-gray-700 rounded`}>
 
       {/* <View style={cls`w-full sm:w-full md:w-1/2 lg:w-1/2 xl:w1/2`}> */}
         <TicketBase
